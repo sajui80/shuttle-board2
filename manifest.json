@@ -1,0 +1,17 @@
+{
+  "name": "퇴근 셔틀",
+  "short_name": "퇴근셔틀",
+  "description": "SIEL 노이다 퇴근 셔틀 배차",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#00B14F",
+  "theme_color": "#00B14F",
+  "lang": "ko",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
