@@ -1,7 +1,8 @@
 {
+  "id": "/shuttle-board2/",
   "name": "퇴근 셔틀",
   "short_name": "퇴근셔틀",
-  "description": "SIEL 노이다 퇴근 셔틀 배차",
+  "description": "SIEL 노이다 퇴근 셔틀 배차 현황 및 탑승 등록",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -9,6 +10,9 @@
   "background_color": "#00B14F",
   "theme_color": "#00B14F",
   "lang": "ko",
+  "dir": "ltr",
+  "categories": ["productivity", "business"],
+  "prefer_related_applications": false,
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
