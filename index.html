@@ -327,7 +327,7 @@ a.merow,a.merow:visited{color:var(--text);text-decoration:none;}
 .pinbox input{width:52px;height:58px;text-align:center;font-size:24px;font-weight:800;border:1.5px solid var(--line);border-radius:14px;outline:none;font-family:var(--mono);}
 .pinbox input:focus{border-color:var(--brand);}
 .toast{
-  position:fixed;left:50%;bottom:84px;transform:translateX(-50%);
+  position:fixed;left:50%;bottom:84px;transform:translateX(-50%);line-height:1.5;
   background:rgba(20,30,25,.94);color:#fff;font-size:13px;font-weight:700;
   padding:11px 18px;border-radius:999px;z-index:90;max-width:88vw;text-align:center;
   animation:up .2s ease;
@@ -660,9 +660,11 @@ function enableNotifications(){
       return navigator.serviceWorker.ready;
     })
     .then(function(){
+      if(Notification.permission === 'denied') throw new Error('BLOCKED');
       return Notification.requestPermission();
     })
     .then(function(perm){
+      if(perm === 'denied') throw new Error('BLOCKED');
       if(perm !== 'granted') throw new Error('DENIED');
       return firebase.messaging().getToken({ vapidKey: VAPID, serviceWorkerRegistration: swReg });
     })
@@ -674,11 +676,29 @@ function enableNotifications(){
 function disableNotifications(){
   return db.collection('users').doc(uid).update({ notifEnabled: false });
 }
+function isBlocked(e){
+  return e.message === 'BLOCKED'
+    || (e.code && String(e.code).indexOf('permission-blocked') >= 0)
+    || (e.message && e.message.indexOf('permission-blocked') >= 0);
+}
 function notifErrText(e){
-  if(e.message === 'DENIED')      return '휴대폰 설정에서 이 앱의 알림을 허용해 주세요';
+  if(e.message === 'DENIED')      return '알림을 허용해 주셔야 받으실 수 있습니다';
   if(e.message === 'UNSUPPORTED') return '이 기기에서는 알림을 지원하지 않습니다';
   if(e.message === 'NO_TOKEN')    return '알림 등록에 실패했습니다. 잠시 후 다시 시도해 주세요';
   return '알림 설정 실패: ' + e.message;
+}
+function showBlockedHelp(){
+  modal = { type:'confirm', title:'알림이 차단되어 있습니다',
+    desc:'이전에 &lsquo;차단&rsquo;을 누르셔서 앱이 다시 여쭤볼 수 없습니다.<br>'
+       + '휴대폰 설정에서 직접 켜주셔야 합니다.<br><br>'
+       + '<b>설정 → 애플리케이션 → 퇴근셔틀 → 알림</b><br>'
+       + '→ 스위치를 <b>켜기</b><br><br>'
+       + '켜신 뒤 앱을 완전히 종료했다가 다시 열고,<br>이 스위치를 한 번 더 눌러주세요.',
+    ok:'설정으로 가기', cancel:'닫기',
+    run:function(){
+      toast('설정 → 애플리케이션 → 퇴근셔틀 → 알림');
+    } };
+  render();
 }
 function watchForeground(){
   if(!notifSupported()) return;
@@ -727,7 +747,7 @@ function maybeAskNotif(){
       run:function(){
         enableNotifications()
           .then(function(){ toast('알림이 켜졌습니다'); })
-          .catch(function(e){ toast(notifErrText(e)); });
+          .catch(function(e){ if(isBlocked(e)) showBlockedHelp(); else toast(notifErrText(e)); });
       } };
     render();
   }, 800);
@@ -1011,9 +1031,12 @@ function viewMe(){
     + '</div>'
     + '<div style="font-size:11px;color:var(--muted);padding:8px 6px 0;line-height:1.6">'
     +   REMIND + ' 미입력 안내와 ' + CUTOFF + ' 마감 현황을 보냅니다.'
-    +   (notifSupported()
-        ? (notifOn() ? '' : '<br><b style="color:var(--warn)">지금은 꺼져 있습니다. 스위치를 켜주세요.</b>')
-        : '<br><b style="color:var(--warn)">이 기기에서는 알림을 지원하지 않습니다.</b>')
+    +   (!notifSupported()
+        ? '<br><b style="color:var(--warn)">이 기기에서는 알림을 지원하지 않습니다.</b>'
+        : (notifOn() ? ''
+          : (('Notification' in window && Notification.permission === 'denied')
+            ? '<br><b style="color:var(--danger)">알림이 차단되어 있습니다. 스위치를 눌러 해제 방법을 확인하세요.</b>'
+            : '<br><b style="color:var(--warn)">지금은 꺼져 있습니다. 스위치를 켜주세요.</b>')))
     + '</div>'
     + '<div class="seclbl">계정</div><div class="group">'
     +   '<button class="merow" id="chName"><span class="mi">✎</span>이름 변경<span class="mv">' + esc(me.name) + ' ›</span></button>'
@@ -1233,7 +1256,7 @@ function bind(){
     tg.disabled = true;
     enableNotifications()
       .then(function(){ toast('알림이 켜졌습니다'); })
-      .catch(function(e){ toast(notifErrText(e)); })
+      .catch(function(e){ if(isBlocked(e)) showBlockedHelp(); else toast(notifErrText(e)); })
       .then(function(){ tg.disabled = false; });
   };
   var cn = document.getElementById('chName');
