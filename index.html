@@ -15,6 +15,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyBgg9e-IeBU39YalD8t4NCuHd4nAfhROw4",
@@ -288,7 +289,8 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .lv .del{margin-left:auto;color:var(--muted);font-size:16px;padding:0 4px;}
 
 /* ---------- 목록 행 ---------- */
-.merow{display:flex;align-items:center;gap:11px;padding:13px 14px;background:var(--surface);border-bottom:1px solid var(--line);font-size:13.5px;font-weight:600;width:100%;text-align:left;}
+.merow{display:flex;align-items:center;gap:11px;padding:13px 14px;background:var(--surface);border-bottom:1px solid var(--line);font-size:13.5px;font-weight:600;width:100%;text-align:left;color:var(--text);text-decoration:none;}
+a.merow,a.merow:visited{color:var(--text);text-decoration:none;}
 .merow:last-child{border-bottom:none;}
 .merow .mi{width:26px;text-align:center;font-size:15px;flex-shrink:0;}
 .merow .mv{margin-left:auto;font-size:12px;color:var(--muted);font-weight:500;}
@@ -378,6 +380,7 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 /* ============================================================
    상수 · 기본값
    ============================================================ */
+var VAPID = 'BGGfo_K1emhe49-XMXQPV35jgKqQzU31aMoYvix-2Rfbcszq2RKRKC3WTuzTDrw6HmPOJ21H9uPDCPfCDJyB620';
 var CAPACITY = 5;
 var CUTOFF = '17:00';
 var REMIND = '16:30';
@@ -427,6 +430,7 @@ var modal = null;
 var calMonth = null;
 var draft = { reason:'own', start:null, end:null, quick:'today', editId:null };
 var ready = { cfg:false, board:false, leaves:false, users:false };
+var swReg = null, askedNotif = false;
 var app = document.getElementById('app');
 
 /* ============================================================
@@ -576,6 +580,7 @@ function subscribe(){
   }, err);
 
   watchBoard();
+  watchForeground();
   setInterval(tick, 20000);
 }
 
@@ -638,6 +643,53 @@ function delLeave(id){ return db.collection('leaves').doc(id).delete(); }
 function saveConfig(patch){ return db.collection('config').doc('app').set(patch, {merge:true}); }
 function isAdmin(){ return me && me.role === 'admin'; }
 
+/* ---------- 알림 ---------- */
+function notifSupported(){
+  try{
+    return ('Notification' in window) && ('serviceWorker' in navigator)
+      && firebase.messaging && firebase.messaging.isSupported && firebase.messaging.isSupported();
+  }catch(e){ return false; }
+}
+function notifOn(){ return me && me.notifEnabled !== false && !!me.fcmToken; }
+
+function enableNotifications(){
+  if(!notifSupported()) return Promise.reject(new Error('UNSUPPORTED'));
+  return navigator.serviceWorker.register('service-worker.js')
+    .then(function(reg){
+      swReg = reg;
+      return navigator.serviceWorker.ready;
+    })
+    .then(function(){
+      return Notification.requestPermission();
+    })
+    .then(function(perm){
+      if(perm !== 'granted') throw new Error('DENIED');
+      return firebase.messaging().getToken({ vapidKey: VAPID, serviceWorkerRegistration: swReg });
+    })
+    .then(function(token){
+      if(!token) throw new Error('NO_TOKEN');
+      return db.collection('users').doc(uid).update({ fcmToken: token, notifEnabled: true });
+    });
+}
+function disableNotifications(){
+  return db.collection('users').doc(uid).update({ notifEnabled: false });
+}
+function notifErrText(e){
+  if(e.message === 'DENIED')      return '휴대폰 설정에서 이 앱의 알림을 허용해 주세요';
+  if(e.message === 'UNSUPPORTED') return '이 기기에서는 알림을 지원하지 않습니다';
+  if(e.message === 'NO_TOKEN')    return '알림 등록에 실패했습니다. 잠시 후 다시 시도해 주세요';
+  return '알림 설정 실패: ' + e.message;
+}
+function watchForeground(){
+  if(!notifSupported()) return;
+  try{
+    firebase.messaging().onMessage(function(payload){
+      var d = (payload && payload.data) || {};
+      if(d.title) toast(d.title.replace(/^\S+\s/, ''));
+    });
+  }catch(e){}
+}
+
 /* ============================================================
    렌더
    ============================================================ */
@@ -656,6 +708,29 @@ function render(){
 
   app.innerHTML = html + (view ? '' : tabbar()) + (modal ? renderModal() : '');
   bind();
+  maybeAskNotif();
+}
+
+function maybeAskNotif(){
+  if(askedNotif || modal || view) return;
+  if(!me || !me.name) return;
+  if(!notifSupported()) return;
+  if(me.fcmToken || me.notifEnabled === false) return;
+  if(Notification.permission === 'denied') return;
+  askedNotif = true;
+  setTimeout(function(){
+    modal = { type:'confirm', title:'알림을 받으시겠습니까?',
+      desc:'하루 두 번만 보냅니다.<br><br>'
+         + '<b>' + REMIND + '</b> 아직 입력하지 않으셨을 때만 안내<br>'
+         + '<b>' + CUTOFF + '</b> 오늘 배차 마감 현황',
+      ok:'알림 받기', cancel:'나중에',
+      run:function(){
+        enableNotifications()
+          .then(function(){ toast('알림이 켜졌습니다'); })
+          .catch(function(e){ toast(notifErrText(e)); });
+      } };
+    render();
+  }, 800);
 }
 
 function hideSplash(){
@@ -926,16 +1001,20 @@ function viewMe(){
   var since = me.createdAt ? new Date(me.createdAt) : null;
   return '<div class="ghead" style="padding-bottom:30px"><div class="ghead-in">'
     + '<div class="hello" style="margin-top:8px">' + esc(me.name) + '</div>'
-    + '<div class="date" style="margin-top:2px">'
+    + '<div class="date" style="margin-top:2px;font-size:12px;font-weight:500;opacity:.8">'
     + (since ? since.getFullYear() + '년 ' + (since.getMonth()+1) + '월 ' + since.getDate() + '일부터 이용 중' : '') + '</div>'
     + '</div></div>'
     + '<div class="scroll"><div class="sheet">'
     + '<div class="seclbl">알림</div><div class="group">'
     +   '<button class="merow" id="tgNotif"><span class="mi">🔔</span>퇴근 셔틀 알림 받기'
-    +     '<span class="toggle' + (me.notifEnabled === false ? ' off' : '') + '"></span></button>'
+    +     '<span class="toggle' + (notifOn() ? '' : ' off') + '"></span></button>'
     + '</div>'
     + '<div style="font-size:11px;color:var(--muted);padding:8px 6px 0;line-height:1.6">'
-    +   REMIND + ' 미입력 안내와 ' + CUTOFF + ' 마감 현황을 보냅니다.</div>'
+    +   REMIND + ' 미입력 안내와 ' + CUTOFF + ' 마감 현황을 보냅니다.'
+    +   (notifSupported()
+        ? (notifOn() ? '' : '<br><b style="color:var(--warn)">지금은 꺼져 있습니다. 스위치를 켜주세요.</b>')
+        : '<br><b style="color:var(--warn)">이 기기에서는 알림을 지원하지 않습니다.</b>')
+    + '</div>'
     + '<div class="seclbl">계정</div><div class="group">'
     +   '<button class="merow" id="chName"><span class="mi">✎</span>이름 변경<span class="mv">' + esc(me.name) + ' ›</span></button>'
     + '</div>'
@@ -1026,7 +1105,7 @@ function renderModal(){
   var m = modal, body = '';
   if(m.type === 'confirm'){
     body = '<div class="modal-h">' + esc(m.title) + '</div><div class="modal-p">' + m.desc + '</div>'
-         + '<div class="modal-row"><button class="btn btn-out" data-mc="0">취소</button>'
+         + '<div class="modal-row"><button class="btn btn-out" data-mc="0">' + esc(m.cancel || '취소') + '</button>'
          + '<button class="btn ' + (m.danger ? 'btn-danger' : 'btn-pri') + '" data-mc="1">' + esc(m.ok || '확인') + '</button></div>';
   } else if(m.type === 'pin'){
     body = '<div class="modal-h">' + esc(m.title) + '</div><div class="modal-p">' + esc(m.desc || '') + '</div>'
@@ -1147,7 +1226,15 @@ function bind(){
   // 내정보
   var tg = document.getElementById('tgNotif');
   if(tg) tg.onclick = function(){
-    db.collection('users').doc(uid).update({ notifEnabled: me.notifEnabled === false });
+    if(notifOn()){
+      disableNotifications().then(function(){ toast('알림을 껐습니다'); });
+      return;
+    }
+    tg.disabled = true;
+    enableNotifications()
+      .then(function(){ toast('알림이 켜졌습니다'); })
+      .catch(function(e){ toast(notifErrText(e)); })
+      .then(function(){ tg.disabled = false; });
   };
   var cn = document.getElementById('chName');
   if(cn) cn.onclick = function(){
