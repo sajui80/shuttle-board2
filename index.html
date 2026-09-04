@@ -42,15 +42,21 @@
   --r-etc:#5B6B7C;  --rb-etc:#EDF1F5;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{margin:0;padding:0;height:100%;}
+/* 당겨서 새로고침 차단: 문서 자체는 스크롤하지 않고, 안쪽 .scroll 만 스크롤한다 */
+html,body{
+  margin:0; padding:0; height:100%;
+  overflow:hidden;
+  overscroll-behavior:none;
+  -webkit-overflow-scrolling:touch;
+}
 body{
   background:var(--bg); color:var(--text); font-family:var(--font);
   font-size:13px; line-height:1.5; -webkit-font-smoothing:antialiased;
-  overscroll-behavior-y:contain;
+  position:fixed; inset:0; width:100%;
 }
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
 input,select,textarea{font-family:inherit;font-size:16px;}
-#app{max-width:520px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;background:var(--bg);}
+#app{max-width:520px;margin:0 auto;height:100%;display:flex;flex-direction:column;background:var(--bg);overflow:hidden;}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums;}
 
 /* ---------- 로딩 / 스플래시 ---------- */
@@ -75,12 +81,12 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .car--full{--body:#EDF0EE;--glass:#D6DEDA;--accent:#B4BCB7;--wheel:#98A29B;--shade:#DDE3E0;--edge:#C6CFC9;}
 
 /* ---------- 온보딩 ---------- */
-.ob{flex:1;display:flex;flex-direction:column;background:var(--surface);}
+.ob{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--surface);overflow-y:auto;overscroll-behavior:contain;}
 .ob-top{background:var(--brand);padding:28px 0 34px;display:flex;justify-content:center;}
 .ob-top svg{width:212px;}
 .ob-icon{width:88px;height:88px;border-radius:28px;background:rgba(255,255,255,.19);display:flex;align-items:center;justify-content:center;}
 .ob-icon svg{width:42px;height:42px;fill:#fff;}
-.ob-sheet{background:var(--surface);border-radius:28px 28px 0 0;margin-top:-26px;flex:1;padding:28px 22px 26px;display:flex;flex-direction:column;}
+.ob-sheet{background:var(--surface);border-radius:28px 28px 0 0;margin-top:-26px;flex:1;min-height:340px;padding:28px 22px 26px;display:flex;flex-direction:column;}
 .ob-h{font-size:23px;font-weight:900;letter-spacing:-.025em;line-height:1.3;}
 .ob-p{font-size:13px;color:var(--muted);line-height:1.65;margin-top:9px;}
 .field{margin-top:22px;}
@@ -107,8 +113,8 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 }
 .backbtn{font-size:12px;opacity:.9;padding:2px 0;display:inline-block;}
 
-.sheet{background:var(--bg);border-radius:26px 26px 0 0;margin-top:-24px;padding:20px 16px 26px;flex:1;}
-.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.sheet{background:var(--bg);border-radius:26px 26px 0 0;margin-top:-24px;padding:20px 16px 26px;min-height:100%;}
+.scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
 .seclbl{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.09em;margin:20px 4px 9px;}
 .seclbl:first-child{margin-top:2px;}
 .card{background:var(--surface);border-radius:18px;padding:15px;box-shadow:0 1px 3px rgba(16,24,20,.07);}
@@ -126,6 +132,8 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .mystat .t{font-size:14px;font-weight:800;letter-spacing:-.01em;}
 .mystat.none .t{color:#B3141F;} .mystat.ok .t{color:var(--brand-dark);} .mystat.leave .t{color:#455160;}
 .mystat .d{font-size:11.5px;color:var(--text-2);margin-top:2px;line-height:1.5;}
+.lvbtns{display:flex;gap:6px;margin-top:11px;}
+.lvbtns .btn{flex:1;background:var(--surface);border-color:#D5DCE3;color:#455160;}
 
 /* ---------- 차량 카드 ---------- */
 .carcard{background:var(--surface);border-radius:18px;padding:13px 14px 12px;margin-bottom:10px;box-shadow:0 1px 3px rgba(16,24,20,.07);border:1.5px solid transparent;}
@@ -395,7 +403,7 @@ var tab = 'home';
 var view = null;               // null | 'leave' | 'admin'
 var modal = null;
 var calMonth = null;
-var draft = { reason:'trip', start:null, end:null, quick:'today' };
+var draft = { reason:'trip', start:null, end:null, quick:'today', editId:null };
 var ready = { cfg:false, board:false, leaves:false, users:false };
 var app = document.getElementById('app');
 
@@ -692,9 +700,13 @@ function viewHome(){
   var mine = myEntry(), lv = myLeaveToday();
   var st;
   if(lv){
-    st = '<div class="mystat leave"><div class="ic">–</div><div>'
+    st = '<div class="mystat leave"><div class="ic">–</div><div style="flex:1;min-width:0">'
        + '<div class="t">오늘은 이용하지 않습니다</div>'
-       + '<div class="d">' + esc(reasonLabel(lv.reason)) + ' · ' + fmtShort(lv.start) + ' ~ ' + fmtShort(lv.end) + '</div></div></div>';
+       + '<div class="d">' + esc(reasonLabel(lv.reason)) + ' · ' + fmtShort(lv.start) + ' ~ ' + fmtShort(lv.end) + '</div>'
+       + '<div class="lvbtns">'
+       +   '<button class="btn btn-out btn-sm" id="editLeave">기간·사유 변경</button>'
+       +   '<button class="btn btn-out btn-sm" id="cancelLeave">등록 취소</button>'
+       + '</div></div></div>';
   } else if(mine){
     var c = carById(mine.car), dr = driverFor(indexOfCar(mine.car));
     var order = ridersOf(mine.car).map(function(r){ return r.uid; }).indexOf(uid) + 1;
@@ -787,12 +799,12 @@ function carCard(c, idx, hero, mine){
 function viewLeave(){
   if(!draft.start){ draft.start = today; draft.end = today; }
   var days = Math.round((parseDate(draft.end) - parseDate(draft.start)) / 86400000) + 1;
-  var mineLv = leaves.filter(function(l){ return l.uid === uid && l.end >= today; })
+  var mineLv = leaves.filter(function(l){ return l.uid === uid && l.end >= today && l.id !== draft.editId; })
                      .sort(function(a,b){ return a.start.localeCompare(b.start); });
 
   return '<div class="ghead"><div class="ghead-in">'
     + '<button class="backbtn" id="back">‹ 뒤로</button>'
-    + '<div class="hello">미이용 등록</div></div></div>'
+    + '<div class="hello">' + (draft.editId ? '미이용 변경' : '미이용 등록') + '</div></div></div>'
     + '<div class="scroll"><div class="sheet">'
     + '<div class="seclbl">사유</div>'
     + '<div class="rsngrid">' + REASONS.map(function(r){
@@ -820,7 +832,9 @@ function viewLeave(){
                  + '<span class="lv-d">' + fmtShort(l.start) + ' ~ ' + fmtShort(l.end) + '</span>'
                  + '<button class="del" data-dellv="' + l.id + '">×</button></div>';
           }).join('') + '</div>' : '')
-    + '<button class="btn btn-pri btn-block" id="saveLeave" style="margin-top:18px">' + days + '일간 미이용 등록</button>'
+    + '<button class="btn btn-pri btn-block" id="saveLeave" style="margin-top:18px">'
+    +   (draft.editId ? '변경 내용 저장' : days + '일간 미이용 등록') + '</button>'
+    + (draft.editId ? '<button class="btn-txt" id="delEditLeave">미이용 등록 취소하기</button>' : '')
     + '</div></div>';
 }
 function qc(k, label){ return '<button class="qc' + (draft.quick===k ? ' on' : '') + '" data-quick="' + k + '">' + label + '</button>'; }
@@ -886,7 +900,7 @@ function viewMe(){
     +     '<span class="toggle' + (me.notifEnabled === false ? ' off' : '') + '"></span></button>'
     + '</div>'
     + '<div style="font-size:11px;color:var(--muted);padding:8px 6px 0;line-height:1.6">'
-    +   REMIND + ' 미입력 안내와 ' + CUTOFF + ' 마감 현황을 보냅니다. 알림 기능은 준비 중입니다.</div>'
+    +   REMIND + ' 미입력 안내와 ' + CUTOFF + ' 마감 현황을 보냅니다.</div>'
     + '<div class="seclbl">계정</div><div class="group">'
     +   '<button class="merow" id="chName"><span class="mi">✎</span>이름 변경<span class="mv">' + esc(me.name) + ' ›</span></button>'
     + '</div>'
@@ -1039,7 +1053,23 @@ function bind(){
     };
   });
   var gl = document.getElementById('goLeave');
-  if(gl) gl.onclick = function(){ view = 'leave'; draft = {reason:'trip', start:today, end:today, quick:'today'}; render(); };
+  if(gl) gl.onclick = function(){ view = 'leave'; draft = {reason:'trip', start:today, end:today, quick:'today', editId:null}; render(); };
+
+  var el = document.getElementById('editLeave');
+  if(el) el.onclick = function(){
+    var lv = myLeaveToday();
+    if(!lv) return;
+    draft = { reason:lv.reason, start:lv.start, end:lv.end, quick:'custom', editId:lv.id };
+    view = 'leave'; render();
+  };
+  var cl = document.getElementById('cancelLeave');
+  if(cl) cl.onclick = function(){
+    var lv = myLeaveToday();
+    if(!lv) return;
+    modal = { type:'confirm', title:'미이용 등록을 취소할까요?', desc:'다시 탑승 차량을 고르실 수 있습니다.', ok:'등록 취소', danger:true,
+      run:function(){ delLeave(lv.id).then(function(){ toast('취소되었습니다'); }); } };
+    render();
+  };
 
   // 미이용
   each('[data-reason]', function(el){ el.onclick = function(){ draft.reason = el.dataset.reason; render(); }; });
@@ -1064,10 +1094,19 @@ function bind(){
   var sl = document.getElementById('saveLeave');
   if(sl) sl.onclick = function(){
     sl.disabled = true;
+    var edit = draft.editId;
     var p = myEntry() ? cancelBook().catch(function(){}) : Promise.resolve();
+    if(edit) p = p.then(function(){ return delLeave(edit); });
     p.then(function(){ return addLeave(draft.reason, draft.start, draft.end); })
-     .then(function(){ view = null; toast('미이용으로 등록되었습니다'); render(); })
+     .then(function(){ view = null; draft.editId = null; toast(edit ? '변경되었습니다' : '미이용으로 등록되었습니다'); render(); })
      .catch(function(e){ sl.disabled = false; toast('실패: ' + e.message); });
+  };
+  var dl = document.getElementById('delEditLeave');
+  if(dl) dl.onclick = function(){
+    var id = draft.editId;
+    modal = { type:'confirm', title:'미이용 등록을 취소할까요?', desc:'다시 탑승 차량을 고르실 수 있습니다.', ok:'등록 취소', danger:true,
+      run:function(){ delLeave(id).then(function(){ view = null; draft.editId = null; toast('취소되었습니다'); render(); }); } };
+    render();
   };
 
   // 내정보
