@@ -102,8 +102,13 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 
 /* ---------- 헤더 ---------- */
 .ghead{background:var(--brand);padding:0 0 30px;flex-shrink:0;}
-.ghead-in{padding:14px 20px 0;color:#fff;}
-.ghead .date{font-size:11.5px;opacity:.85;font-weight:500;}
+.ghead-in{padding:14px 20px 0;color:#fff;position:relative;}
+.ghead .date{font-size:14.5px;opacity:.92;font-weight:700;letter-spacing:-.01em;}
+.gh-sym{position:absolute;right:14px;top:6px;width:108px;pointer-events:none;}
+.gh-sym.small{width:88px;top:12px;}
+.gh-sym svg{width:100%;height:auto;display:block;}
+.has-sym .date,.has-sym .hello{padding-right:112px;}
+.has-sym.small-sym .date,.has-sym.small-sym .hello{padding-right:96px;}
 .ghead .hello{font-size:20px;font-weight:800;letter-spacing:-.01em;margin-top:2px;}
 .ghead.admin{background:var(--text);}
 .countdown{
@@ -111,7 +116,24 @@ input,select,textarea{font-family:inherit;font-size:16px;}
   background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);
   color:#fff;border-radius:999px;padding:6px 13px;font-size:12px;font-weight:700;
 }
-.backbtn{font-size:12px;opacity:.9;padding:2px 0;display:inline-block;}
+.backbtn{font-size:14.5px;font-weight:700;opacity:.95;padding:4px 0;display:inline-block;}
+/* 미이용 화면 가독성 */
+.lvsheet .seclbl{font-size:13.5px;font-weight:800;color:var(--text-2);letter-spacing:.02em;margin:22px 4px 10px;}
+.lvsheet .rsn{padding:13px 4px 11px;}
+.lvsheet .rsn .ri{width:36px;height:36px;}
+.lvsheet .rsn .ri svg{width:19px;height:19px;}
+.lvsheet .rsn .rt{font-size:13.5px;}
+.lvsheet .qc{font-size:12.5px;padding:9px 10px;}
+.lvsheet .dcell{padding:10px 13px 11px;}
+.lvsheet .dcell span{font-size:11.5px;}
+.lvsheet .dcell b{font-size:20px;}
+.lvsheet .dcell em{font-size:12.5px;}
+.lvsheet .dpreview{padding:13px 15px;}
+.lvsheet .dp-t{font-size:14.5px;}
+.lvsheet .dp-d{font-size:12.5px;}
+.lvsheet .dnote{font-size:12.5px;line-height:1.7;}
+.lvsheet .lv-d{font-size:12.5px;}
+.lvsheet .rsnchip{font-size:12px;}
 
 .sheet{background:var(--bg);border-radius:26px 26px 0 0;margin-top:-24px;padding:20px 16px 26px;min-height:100%;}
 .scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
@@ -371,9 +393,9 @@ var DEFAULT_DRIVERS = [
   {name:'Amit',     phone:'+919958056187'}
 ];
 var REASONS = [
+  {key:'own',  label:'자차'},
   {key:'trip', label:'출장'},
   {key:'vac',  label:'휴가'},
-  {key:'own',  label:'자차'},
   {key:'etc',  label:'기타'}
 ];
 var RICON = {
@@ -403,7 +425,7 @@ var tab = 'home';
 var view = null;               // null | 'leave' | 'admin'
 var modal = null;
 var calMonth = null;
-var draft = { reason:'trip', start:null, end:null, quick:'today', editId:null };
+var draft = { reason:'own', start:null, end:null, quick:'today', editId:null };
 var ready = { cfg:false, board:false, leaves:false, users:false };
 var app = document.getElementById('app');
 
@@ -689,8 +711,13 @@ function header(){
   if(isHoliday(today))      cd = '<div class="countdown">휴무일 · 셔틀 미운행</div>';
   else if(isWeekend(today)) cd = '<div class="countdown">주말 · 셔틀 미운행</div>';
   else if(left > 0)         cd = '<div class="countdown">입력 마감까지 <span class="mono">' + pad(Math.floor(left/60)) + ':' + pad(left%60) + '</span></div>';
-  else                      cd = '<div class="countdown">' + CUTOFF + ' 마감 지남 · 입력은 계속 가능</div>';
-  return '<div class="ghead"><div class="ghead-in">'
+  else                      cd = '<div class="countdown">등록 마감</div>';
+  var sym = '<div class="gh-sym"><svg viewBox="0 0 288 132" class="car" style="'
+    + '--body:rgba(255,255,255,.95);--glass:rgba(255,255,255,.42);--accent:rgba(255,255,255,.6);'
+    + '--wheel:#0A7A37;--shade:rgba(255,255,255,.55);--edge:rgba(255,255,255,0)">'
+    + '<use href="#carnival"/></svg></div>';
+  return '<div class="ghead"><div class="ghead-in has-sym">'
+    + sym
     + '<div class="date">' + dateTxt + '</div>'
     + '<div class="hello">' + esc(me.name) + '님, 안녕하세요</div>'
     + cd + '</div></div>';
@@ -802,10 +829,18 @@ function viewLeave(){
   var mineLv = leaves.filter(function(l){ return l.uid === uid && l.end >= today && l.id !== draft.editId; })
                      .sort(function(a,b){ return a.start.localeCompare(b.start); });
 
-  return '<div class="ghead"><div class="ghead-in">'
+  var lvSym = '<div class="gh-sym small"><svg viewBox="0 0 288 132" class="car" style="'
+    + '--body:rgba(255,255,255,.9);--glass:rgba(255,255,255,.38);--accent:rgba(255,255,255,.55);'
+    + '--wheel:#0A7A37;--shade:rgba(255,255,255,.5);--edge:rgba(255,255,255,0)">'
+    + '<use href="#carnival"/>'
+    + '<line x1="26" y1="116" x2="262" y2="16" stroke="rgba(255,255,255,.55)" stroke-width="20" stroke-linecap="round"/>'
+    + '<line x1="26" y1="116" x2="262" y2="16" stroke="#00B14F" stroke-width="9" stroke-linecap="round"/>'
+    + '</svg></div>';
+  return '<div class="ghead"><div class="ghead-in has-sym small-sym">'
+    + lvSym
     + '<button class="backbtn" id="back">‹ 뒤로</button>'
     + '<div class="hello">' + (draft.editId ? '미이용 변경' : '미이용 등록') + '</div></div></div>'
-    + '<div class="scroll"><div class="sheet">'
+    + '<div class="scroll"><div class="sheet lvsheet">'
     + '<div class="seclbl">사유</div>'
     + '<div class="rsngrid">' + REASONS.map(function(r){
         return '<button class="rsn r-' + r.key + (draft.reason===r.key ? ' on' : '') + '" data-reason="' + r.key + '">'
@@ -1053,7 +1088,7 @@ function bind(){
     };
   });
   var gl = document.getElementById('goLeave');
-  if(gl) gl.onclick = function(){ view = 'leave'; draft = {reason:'trip', start:today, end:today, quick:'today', editId:null}; render(); };
+  if(gl) gl.onclick = function(){ view = 'leave'; draft = {reason:'own', start:today, end:today, quick:'today', editId:null}; render(); };
 
   var el = document.getElementById('editLeave');
   if(el) el.onclick = function(){
