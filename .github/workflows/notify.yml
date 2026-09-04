@@ -1,0 +1,53 @@
+name: 퇴근셔틀 알림
+
+on:
+  schedule:
+    - cron: '45 10 * * 1-5'   # UTC 10:45 = IST 16:15 기동 → 16:30 발송
+    - cron: '15 11 * * 1-5'   # UTC 11:15 = IST 16:45 기동 → 17:00 발송
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: '수동 테스트'
+        type: choice
+        options: [remind, summary]
+        default: remind
+
+permissions:
+  contents: write
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: firebase-admin 설치
+        run: npm install firebase-admin@12 --no-save
+
+      - name: 발송 종류 결정
+        run: |
+          if [ "${{ github.event.schedule }}" = "15 11 * * 1-5" ]; then
+            echo "MODE=summary" >> $GITHUB_ENV
+          elif [ -n "${{ inputs.mode }}" ]; then
+            echo "MODE=${{ inputs.mode }}" >> $GITHUB_ENV
+          else
+            echo "MODE=remind" >> $GITHUB_ENV
+          fi
+
+      - name: 알림 발송
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: node notify.js
+
+      - name: 실행 기록 저장
+        run: |
+          git config user.name  "shuttle-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add logs || true
+          git diff --staged --quiet || git commit -m "알림 발송 기록 $(date -u +%Y-%m-%d)"
+          git push || true
