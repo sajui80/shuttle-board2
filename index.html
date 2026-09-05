@@ -67,7 +67,10 @@ input,select,textarea{font-family:inherit;font-size:16px;}
   transition:opacity .35s ease;
 }
 .splash.hide{opacity:0;pointer-events:none;}
-.splash svg{width:230px;max-width:62vw;margin-bottom:24px;}
+.splash svg{width:230px;max-width:62vw;margin-bottom:24px;
+  --body:#FFFFFF;--body2:#DCEFE4;--glass:#B6E8CE;--glass2:#D8F4E7;--trim:#CFEADC;
+  --accent:#00913F;--edge:rgba(255,255,255,0);--pillar:#0C6B34;--tire:#0A5F2E;
+  --rim:#E8F6EE;--lamp:#8FD3B0;--tail:#E5202E;}
 .splash .logo{font-size:29px;font-weight:900;letter-spacing:-.035em;}
 .splash .tag{font-size:12px;opacity:.85;margin-top:5px;letter-spacing:.06em;}
 .splash .err{
@@ -77,9 +80,9 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 
 /* ---------- 차량 SVG ---------- */
 .car{width:100%;height:auto;display:block;
-  --body:#FFF; --glass:#CDEFDD; --accent:#00B14F; --wheel:#26352D; --shade:#E7ECE9; --edge:#DCE3DF;}
-.car--warn{--accent:#FF8A00;}
-.car--full{--body:#EDF0EE;--glass:#D6DEDA;--accent:#B4BCB7;--wheel:#98A29B;--shade:#DDE3E0;--edge:#C6CFC9;}
+  --body:#FFFFFF; --body2:#E4EBE7; --glass:#BEE6D2; --glass2:#DCF3E7;
+  --trim:#BCC9C2; --accent:#00B14F; --edge:#D3DDD7; --pillar:#26332C;
+  --tire:#2A3138; --rim:#D8DEE2; --lamp:#93AEBE; --tail:#E5202E;}
 
 /* ---------- 온보딩 ---------- */
 .ob{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--surface);overflow-y:auto;overscroll-behavior:contain;}
@@ -338,34 +341,84 @@ a.merow,a.merow:visited{color:var(--text);text-decoration:none;}
 }
 .banner.red{background:var(--danger-tint);border-color:#F7CDD2;color:#B3141F;}
 .empty{color:var(--muted);font-size:12px;padding:6px 2px;}
+/* 차량 메모 */
+.memos{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:9px 0 1px;}
+.memo{display:inline-flex;align-items:center;gap:5px;max-width:100%;
+  background:#FFF7E6;color:#9A5B00;border:1px solid #FFE2AE;
+  border-radius:999px;padding:5px 7px 5px 11px;font-size:12px;line-height:1.25;}
+.memo b{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.memo i{font-style:normal;font-weight:600;font-size:11px;opacity:.62;flex-shrink:0;}
+.memo button{border:0;background:none;color:inherit;opacity:.5;font-size:16px;
+  line-height:1;padding:0 2px;cursor:pointer;flex-shrink:0;}
+.memoadd{border:1.4px dashed var(--line);background:none;color:var(--muted);
+  border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700;cursor:pointer;}
+.memoadd:active{background:var(--tint);}
+.carcard.slim .memos{margin-top:7px;}
 </style>
 </head>
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="carnival" viewBox="0 0 288 132">
-    <ellipse cx="146" cy="118" rx="120" ry="6.5" fill="rgba(20,35,28,.10)"/>
-    <path d="M24 101 C17 101 13 97 13 90 L13 66 C13 59 17 55 24 53 L64 47 L88 22 C91 18.5 95 17 100 17
-             L240 17 C249 17 255 20 259 27 L268 45 C273 53 275 60 275 68 L275 90 C275 97 271 101 264 101 Z"
-          fill="var(--body)" stroke="var(--edge)" stroke-width="1.8" stroke-linejoin="round"/>
-    <path d="M96 52 L112 26 L238 26 C245 26 250 28 253 33 L263 52 Z" fill="var(--glass)"/>
-    <path d="M150 26 h9 v26 h-9 z" fill="var(--body)"/>
-    <path d="M206 26 h9 v26 h-9 z" fill="var(--body)"/>
-    <path d="M97 55 L84 55 L82 63 L97 63 Z" fill="var(--body)" stroke="var(--edge)" stroke-width="1.6" stroke-linejoin="round"/>
-    <rect x="34" y="88" width="222" height="6" rx="3" fill="var(--accent)"/>
-    <path d="M154 56 L154 86 M210 56 L210 86" stroke="var(--shade)" stroke-width="2.2" stroke-linecap="round"/>
-    <rect x="162" y="62" width="16" height="4.2" rx="2.1" fill="var(--shade)"/>
-    <rect x="218" y="62" width="16" height="4.2" rx="2.1" fill="var(--shade)"/>
-    <path d="M14 61 L32 59 L32 68 L14 69 Z" fill="var(--shade)"/>
-    <rect x="265" y="56" width="10" height="18" rx="3" fill="var(--accent)"/>
-    <path d="M54 94 a24 24 0 0 1 48 0 M204 94 a24 24 0 0 1 48 0" fill="var(--body)" stroke="var(--edge)" stroke-width="1.8"/>
-    <circle cx="78" cy="94" r="19.5" fill="var(--wheel)"/><circle cx="78" cy="94" r="7.5" fill="var(--body)"/>
-    <circle cx="228" cy="94" r="19.5" fill="var(--wheel)"/><circle cx="228" cy="94" r="7.5" fill="var(--body)"/>
+    <!-- 접지 그림자 -->
+    <ellipse cx="144" cy="120" rx="126" ry="6" fill="rgba(20,35,28,.10)"/>
+    <!-- 루프랙 -->
+    <rect x="106" y="14.4" width="126" height="4.4" rx="2.2" fill="var(--trim)"/>
+    <!-- 차체 -->
+    <path d="M22 102 C14 102 10 98 10 91 L10 70 C10 64 13 60.5 19 59 L62 50 L86 24
+             C89 20 94 18 100 18 L236 18 C246 18 252 21 256 28 L268 47
+             C273 55 276 62 276 70 L276 91 C276 98 272 102 265 102 Z"
+          fill="var(--body)" stroke="var(--edge)" stroke-width="1.6" stroke-linejoin="round"/>
+    <!-- 하부 로커 투톤 -->
+    <path d="M10 88 L276 88 L276 91 C276 98 272 102 265 102 L22 102 C14 102 10 98 10 91 Z"
+          fill="var(--body2)"/>
+    <!-- 유리 -->
+    <path d="M94 52 L112 27 L236 27 C243 27 248 29 251 34 L260 52 Z" fill="var(--glass)"/>
+    <path d="M100 49 L116 30 L148 30 L126 49 Z" fill="var(--glass2)"/>
+    <!-- D필러 (KA4 글로시 블랙) -->
+    <path d="M231 27 L236 27 C243 27 248 29 251 34 L260 52 L236 52 Z" fill="var(--pillar)"/>
+    <!-- B·C 필러 -->
+    <path d="M146 27 h8 v25 h-8 z" fill="var(--body)"/>
+    <path d="M198 27 h8 v25 h-8 z" fill="var(--body)"/>
+    <!-- 벨트라인 크롬 -->
+    <rect x="94" y="49.4" width="167" height="3.2" rx="1.6" fill="var(--trim)"/>
+    <!-- 슬라이딩 도어 레일 -->
+    <path d="M208 57 H246" fill="none" stroke="var(--trim)"
+          stroke-width="2" stroke-linecap="round" opacity=".8"/>
+    <!-- 도어 컷 라인 -->
+    <path d="M104 55 V93 M150 55 V93 M202 55 V93" stroke="var(--body2)" stroke-width="2" stroke-linecap="round"/>
+    <!-- 도어 손잡이 -->
+    <rect x="156" y="60" width="18" height="4.6" rx="2.3" fill="var(--trim)"/>
+    <rect x="210" y="60" width="18" height="4.6" rx="2.3" fill="var(--trim)"/>
+    <!-- 사이드미러 -->
+    <path d="M95 55 L82 55 C79 55 77.5 56.6 77.5 59 L77.5 62 C77.5 64.4 79 66 82 66 L95 66 Z"
+          fill="var(--body)" stroke="var(--edge)" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="79" y="57.5" width="8" height="6" rx="2" fill="var(--pillar)" opacity=".45"/>
+    <!-- 헤드램프 · 주간주행등 -->
+    <path d="M10 62 L34 58.5 L37 67 L10 70.5 Z" fill="var(--lamp)"/>
+    <path d="M13 72.5 L28 71 L28 75.5 L13 77 Z" fill="var(--pillar)" opacity=".3"/>
+    <!-- 프론트 그릴 -->
+    <path d="M10 79 L30 77 L30 86 L10 87 Z" fill="var(--body2)"/>
+    <!-- 리어 수직 LED 램프 -->
+    <rect x="267" y="52" width="8.5" height="26" rx="2.6" fill="var(--tail)"/>
+    <!-- 휠하우스 -->
+    <path d="M50 96 a26 26 0 0 1 52 0 M198 96 a26 26 0 0 1 52 0"
+          fill="var(--body)" stroke="var(--edge)" stroke-width="1.6"/>
+    <!-- 앞바퀴 -->
+    <circle cx="76" cy="96" r="20.5" fill="var(--tire)"/>
+    <circle cx="76" cy="96" r="10.6" fill="var(--rim)"/>
+    <circle cx="76" cy="96" r="6.6" fill="none" stroke="var(--tire)" stroke-width="1.5" opacity=".3"/>
+    <circle cx="76" cy="96" r="2.6" fill="var(--tire)" opacity=".55"/>
+    <!-- 뒷바퀴 -->
+    <circle cx="224" cy="96" r="20.5" fill="var(--tire)"/>
+    <circle cx="224" cy="96" r="10.6" fill="var(--rim)"/>
+    <circle cx="224" cy="96" r="6.6" fill="none" stroke="var(--tire)" stroke-width="1.5" opacity=".3"/>
+    <circle cx="224" cy="96" r="2.6" fill="var(--tire)" opacity=".55"/>
   </symbol>
 </svg>
 
 <div class="splash" id="splash">
-  <svg viewBox="0 0 288 132" class="car" style="--glass:#B6E8CE;--accent:#00913F;--shade:#E9F5EE;--edge:rgba(255,255,255,.5)"><use href="#carnival"/></svg>
+  <svg viewBox="0 0 288 132" class="car" id="splashCar"><use href="#carnival"/></svg>
   <div class="logo">퇴근셔틀</div>
   <div class="tag">SIEL NOIDA</div>
   <div class="err" id="splashErr"></div>
@@ -401,9 +454,25 @@ var REASONS = [
   {key:'vac',  label:'휴가'},
   {key:'etc',  label:'기타'}
 ];
+/* 호차별 카니발 실차 컬러 (1 스노우화이트 · 2 실키실버 · 3 그라파이트 · 4 딥크로마블루) */
+var CAR_SKIN = {
+  1:'--body:#FFFFFF;--body2:#E4EBE7;--glass:#BEE6D2;--glass2:#DCF3E7;--trim:#BCC9C2;--accent:#00B14F;--edge:#D3DDD7;--pillar:#26332C;--tire:#2A3138;--rim:#D8DEE2;--lamp:#93AEBE;--tail:#E5202E',
+  2:'--body:#C8D1D8;--body2:#A9B3BB;--glass:#9CC3D6;--glass2:#C2DCE9;--trim:#EFF3F6;--accent:#7C8A96;--edge:#A6B1B9;--pillar:#232A30;--tire:#2A3138;--rim:#E2E7EA;--lamp:#7E9AAB;--tail:#E5202E',
+  3:'--body:#444E57;--body2:#343C44;--glass:#6E8492;--glass2:#8CA1AE;--trim:#C0CAD1;--accent:#93A1AD;--edge:#5A656E;--pillar:#1E2429;--tire:#22282D;--rim:#CFD6DB;--lamp:#BFD2DC;--tail:#FF3B47',
+  4:'--body:#21406A;--body2:#193253;--glass:#5D83AD;--glass2:#7FA1C6;--trim:#B4C7DC;--accent:#7FA5CE;--edge:#2F5583;--pillar:#142640;--tire:#22282D;--rim:#CBD6E2;--lamp:#B7CFE0;--tail:#FF3B47'
+};
+var SKIN_FULL = '--body:#EDF0EE;--body2:#DFE4E1;--glass:#D6DEDA;--glass2:#E6EBE8;--trim:#CDD5D0;--accent:#B4BCB7;--edge:#C6CFC9;--pillar:#8B958E;--tire:#96A09A;--rim:#D6DCD8;--lamp:#C2CBCE;--tail:#C9A9AC';
+var SKIN_MONO = '--body:rgba(255,255,255,.95);--body2:rgba(255,255,255,.72);--glass:rgba(255,255,255,.40);--glass2:rgba(255,255,255,.55);--trim:rgba(255,255,255,.85);--accent:rgba(255,255,255,.6);--edge:rgba(255,255,255,0);--pillar:rgba(255,255,255,.45);--tire:#0A7A37;--rim:rgba(255,255,255,.88);--lamp:rgba(255,255,255,.8);--tail:rgba(255,255,255,.75)';
+var SKIN_HERO = '--body:#FFFFFF;--body2:#DCEFE4;--glass:#B6E8CE;--glass2:#D8F4E7;--trim:#CFEADC;--accent:#00913F;--edge:rgba(255,255,255,0);--pillar:#0C6B34;--tire:#0A5F2E;--rim:#E8F6EE;--lamp:#8FD3B0;--tail:#E5202E';
+function carSkin(id, state){
+  if(state === 'full') return SKIN_FULL;
+  var s = CAR_SKIN[id] || CAR_SKIN[1];
+  if(state === 'warn') s += ';--accent:#FF8A00';
+  return s;
+}
 var RICON = {
   trip:'<rect x="2.8" y="7" width="18.4" height="12.6" rx="2.4"/><path d="M8.6 7V5.6A1.6 1.6 0 0 1 10.2 4h3.6a1.6 1.6 0 0 1 1.6 1.6V7"/>',
-  vac :'<circle cx="12" cy="12" r="3.9"/><path d="M12 2.6v2.1M12 19.3v2.1M2.6 12h2.1M19.3 12h2.1M5.4 5.4l1.5 1.5M17.1 17.1l1.5 1.5M18.6 5.4l-1.5 1.5M6.9 17.1l-1.5 1.5"/>',
+  vac :'<path d="M3.5 12.4A8.5 8.5 0 0 1 20.5 12.4C18.4 11.2 16.3 11.2 14.2 12.4C12.1 11.2 10 11.2 7.9 12.4C6.4 11.5 5 11.5 3.5 12.4Z"/><path d="M12 11.6V19.7"/><path d="M12 19.7a2.1 2.1 0 0 0 4.1.5"/>',
   own :'<path d="M5.2 11.2 6.7 7.8A2 2 0 0 1 8.5 6.6h7a2 2 0 0 1 1.8 1.2l1.5 3.4M4.6 11.2h14.8a1.9 1.9 0 0 1 1.9 1.9v3.3H2.7v-3.3a1.9 1.9 0 0 1 1.9-1.9Z"/><circle cx="7.4" cy="16.4" r="1.5"/><circle cx="16.6" cy="16.4" r="1.5"/>',
   etc :'<circle cx="5.6" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="18.4" cy="12" r="1.4" fill="currentColor" stroke="none"/>'
 };
@@ -432,6 +501,35 @@ var draft = { reason:'own', start:null, end:null, quick:'today', editId:null };
 var ready = { cfg:false, board:false, leaves:false, users:false };
 var swReg = null, askedNotif = false;
 var app = document.getElementById('app');
+var histArmed = false;          // 안드로이드 뒤로가기용 히스토리 항목 보유 여부
+
+/* ============================================================
+   화면 이동
+   안드로이드 뒤로가기(취소 버튼) = 한 단계 뒤로 → 최종 홈 화면
+   홈 화면에서 한 번 더 누르면 앱 종료
+   ------------------------------------------------------------
+   history.back() 을 코드에서 부르지 않는다. 항목을 '쌓기만' 하므로
+   상태가 어긋나 앱이 갑자기 닫히는 일이 없다.
+   ============================================================ */
+function atRoot(){ return !modal && !view && tab === 'home'; }
+function armHistory(){
+  if(!atRoot() && !histArmed){
+    histArmed = true;
+    try { history.pushState({ sh:1 }, ''); } catch(e){}
+  }
+}
+function openModal(m){ modal = m; render(); }
+function closeModal(){ modal = null; render(); }
+function openView(v){ view = v; render(); }
+function closeView(){ view = null; render(); }
+function setTab(k){ tab = k; view = null; render(); }
+window.addEventListener('popstate', function(){
+  histArmed = false;
+  if(modal){ modal = null; render(); return; }   // 1) 팝업 닫기
+  if(view){ view = null; render(); return; }     // 2) 하위 화면 → 탭 화면
+  if(tab !== 'home'){ tab = 'home'; render(); return; }  // 3) 탭 → 홈
+  // 4) 홈에서 뒤로 → 막지 않는다 (앱 종료)
+});
 
 /* ============================================================
    유틸
@@ -451,7 +549,8 @@ function fmtShort(s){ return s.slice(5).replace('-','.'); }
 function addDays(s, n){ var d = parseDate(s); d.setDate(d.getDate()+n); return dateStr(d); }
 function minsNow(){ var n = new Date(); return n.getHours()*60 + n.getMinutes(); }
 function toMins(hm){ var p = hm.split(':'); return (+p[0])*60 + (+p[1]); }
-function isWeekend(s){ var d = parseDate(s).getDay(); return d===0 || d===6; }
+/* 운행일: 월~토. 일요일만 미운행 */
+function isOffDay(s){ return parseDate(s).getDay() === 0; }
 function isHoliday(s){
   if(!config) return false;
   if((config.holidays||[]).indexOf(s) >= 0) return true;
@@ -487,6 +586,31 @@ function ridersOf(carId){
   return out;
 }
 function myEntry(){ return entries()[uid] || null; }
+/* ---------- 차량 메모 ---------- */
+function memosOf(carId){
+  var m = (board && board.memos) ? board.memos[String(carId)] : null;
+  return Array.isArray(m) ? m : [];
+}
+function saveMemos(carId, arr){
+  var patch = {}; patch['memos.' + carId] = arr;
+  return db.collection('board').doc(today).update(patch)
+    .catch(function(){                       // 문서가 아직 없을 때
+      var m = {}; m[String(carId)] = arr;
+      return db.collection('board').doc(today).set({ date: today, memos: m }, { merge:true });
+    });
+}
+function addMemo(carId, text){
+  var arr = memosOf(carId).slice();
+  if(arr.length >= 5) return Promise.reject(new Error('메모는 차량당 5개까지입니다'));
+  arr.push({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    text: text.slice(0,40), uid: uid, name: me.name, ts: Date.now()
+  });
+  return saveMemos(carId, arr);
+}
+function delMemo(carId, id){
+  return saveMemos(carId, memosOf(carId).filter(function(m){ return m.id !== id; }));
+}
 function todaysLeaves(){
   return leaves.filter(function(l){ return l.start <= today && today <= l.end; });
 }
@@ -688,17 +812,16 @@ function notifErrText(e){
   return '알림 설정 실패: ' + e.message;
 }
 function showBlockedHelp(){
-  modal = { type:'confirm', title:'알림이 차단되어 있습니다',
+  openModal({ type:'confirm', title:'알림이 차단되어 있습니다',
     desc:'이전에 &lsquo;차단&rsquo;을 누르셔서 앱이 다시 여쭤볼 수 없습니다.<br>'
        + '휴대폰 설정에서 직접 켜주셔야 합니다.<br><br>'
        + '<b>설정 → 애플리케이션 → 퇴근셔틀 → 알림</b><br>'
        + '→ 스위치를 <b>켜기</b><br><br>'
        + '켜신 뒤 앱을 완전히 종료했다가 다시 열고,<br>이 스위치를 한 번 더 눌러주세요.',
-    ok:'설정으로 가기', cancel:'닫기',
+    ok:'확인', cancel:'닫기',
     run:function(){
       toast('설정 → 애플리케이션 → 퇴근셔틀 → 알림');
-    } };
-  render();
+    } });
 }
 function watchForeground(){
   if(!notifSupported()) return;
@@ -728,6 +851,7 @@ function render(){
 
   app.innerHTML = html + (view ? '' : tabbar()) + (modal ? renderModal() : '');
   bind();
+  armHistory();
   maybeAskNotif();
 }
 
@@ -739,7 +863,7 @@ function maybeAskNotif(){
   if(Notification.permission === 'denied') return;
   askedNotif = true;
   setTimeout(function(){
-    modal = { type:'confirm', title:'알림을 받으시겠습니까?',
+    openModal({ type:'confirm', title:'알림을 받으시겠습니까?',
       desc:'하루 두 번만 보냅니다.<br><br>'
          + '<b>' + REMIND + '</b> 아직 입력하지 않으셨을 때만 안내<br>'
          + '<b>' + CUTOFF + '</b> 오늘 배차 마감 현황',
@@ -748,8 +872,7 @@ function maybeAskNotif(){
         enableNotifications()
           .then(function(){ toast('알림이 켜졌습니다'); })
           .catch(function(e){ if(isBlocked(e)) showBlockedHelp(); else toast(notifErrText(e)); });
-      } };
-    render();
+      } });
   }, 800);
 }
 
@@ -763,7 +886,7 @@ function hideSplash(){
 /* ---------- 온보딩 ---------- */
 function viewOnboard(){
   return '<div class="ob">'
-    + '<div class="ob-top"><svg class="car" viewBox="0 0 288 132" style="--glass:#B6E8CE;--accent:#00913F;--shade:#E9F5EE;--edge:rgba(255,255,255,.5)"><use href="#carnival"/></svg></div>'
+    + '<div class="ob-top"><svg class="car" viewBox="0 0 288 132" style="' + SKIN_HERO + '"><use href="#carnival"/></svg></div>'
     + '<div class="ob-sheet">'
     +   '<div class="ob-h">먼저 이름을<br>알려주세요</div>'
     +   '<div class="ob-p">한 번만 입력하면 이 휴대폰에 저장됩니다.<br>다음부터는 바로 탑승 등록만 하시면 됩니다.</div>'
@@ -804,12 +927,10 @@ function header(){
   var left = toMins(CUTOFF) - minsNow();
   var cd;
   if(isHoliday(today))      cd = '<div class="countdown">휴무일 · 셔틀 미운행</div>';
-  else if(isWeekend(today)) cd = '<div class="countdown">주말 · 셔틀 미운행</div>';
+  else if(isOffDay(today))  cd = '<div class="countdown">일요일 · 셔틀 미운행</div>';
   else if(left > 0)         cd = '<div class="countdown">입력 마감까지 <span class="mono">' + pad(Math.floor(left/60)) + ':' + pad(left%60) + '</span></div>';
   else                      cd = '<div class="countdown">등록 마감</div>';
-  var sym = '<div class="gh-sym"><svg viewBox="0 0 288 132" class="car" style="'
-    + '--body:rgba(255,255,255,.95);--glass:rgba(255,255,255,.42);--accent:rgba(255,255,255,.6);'
-    + '--wheel:#0A7A37;--shade:rgba(255,255,255,.55);--edge:rgba(255,255,255,0)">'
+  var sym = '<div class="gh-sym"><svg viewBox="0 0 288 132" class="car" style="' + SKIN_MONO + '">'
     + '<use href="#carnival"/></svg></div>';
   return '<div class="ghead"><div class="ghead-in has-sym">'
     + sym
@@ -889,6 +1010,18 @@ function carCard(c, idx, hero, mine){
     return '<span class="' + (r.uid === uid ? 'me' : '') + '">' + esc(r.name) + '</span>';
   }).join('');
 
+  var skin = carSkin(c.id, state);
+  var mm = memosOf(c.id);
+  var memoRow = '<div class="memos">'
+    + mm.map(function(m){
+        var can = (m.uid === uid) || isAdmin();
+        return '<span class="memo"><b>' + esc(m.text) + '</b>'
+             + (m.name ? '<i>' + esc(m.name) + '</i>' : '')
+             + (can ? '<button data-delmemo="' + c.id + '|' + m.id + '" aria-label="메모 삭제">×</button>' : '')
+             + '</span>';
+      }).join('')
+    + '<button class="memoadd" data-addmemo="' + c.id + '">+ 메모</button></div>';
+
   var btn = '';
   if(picked)                     btn = '<button class="btn btn-out btn-sm" data-cancel="1">취소</button>';
   else if(state === 'full')      btn = '';
@@ -899,20 +1032,22 @@ function carCard(c, idx, hero, mine){
       + '<div class="cc-top"><div class="cc-badge">' + c.id + '</div><div class="cc-name">' + c.id + '호차</div>'
       +   (picked ? '<span class="picktag">탑승 확정</span>' : '')
       +   '<div class="cc-time">' + esc(c.time) + '</div></div>'
-      + '<div class="cc-art ' + state + '"><svg class="car' + (state==='warn'?' car--warn':'') + (state==='full'?' car--full':'') + '" viewBox="0 0 288 132"><use href="#carnival"/></svg></div>'
+      + '<div class="cc-art ' + state + '"><svg class="car" style="' + skin + '" viewBox="0 0 288 132"><use href="#carnival"/></svg></div>'
       + '<div class="cc-mid"><div class="cc-driver">기사 <b>' + esc(dr.name) + '</b></div>' + call
       +   '<div class="cc-seat">' + seatHtml(n, state) + '<span class="cc-cnt' + cntCls + '">' + cnt + '</span></div></div>'
+      + memoRow
       + (rid.length || btn ? '<div class="cc-foot"><div class="riders">' + (ridersHtml || '<span style="background:none;color:var(--muted)">아직 없음</span>') + '</div>' + btn + '</div>' : '')
       + '</div>';
   }
   return '<div class="carcard slim' + (state==='full' ? ' closed' : '') + '">'
     + '<div class="slim-top">'
-    +   '<div class="slim-art ' + state + '"><svg class="car' + (state==='warn'?' car--warn':'') + (state==='full'?' car--full':'') + '" viewBox="0 0 288 132"><use href="#carnival"/></svg></div>'
+    +   '<div class="slim-art ' + state + '"><svg class="car" style="' + skin + '" viewBox="0 0 288 132"><use href="#carnival"/></svg></div>'
     +   '<div class="slim-main">'
     +     '<div class="slim-r1"><div class="cc-badge">' + c.id + '</div><div class="cc-name">' + c.id + '호차</div><div class="cc-time">' + esc(c.time) + '</div></div>'
     +     '<div class="slim-r2"><div class="cc-driver">기사 <b>' + esc(dr.name) + '</b></div>' + call
     +       '<span class="cc-cnt' + cntCls + '">' + cnt + '</span></div>'
     +   '</div></div>'
+    + memoRow
     + (rid.length || btn ? '<div class="cc-foot"><div class="riders">' + ridersHtml + '</div>' + btn + '</div>' : '')
     + '</div>';
 }
@@ -924,9 +1059,7 @@ function viewLeave(){
   var mineLv = leaves.filter(function(l){ return l.uid === uid && l.end >= today && l.id !== draft.editId; })
                      .sort(function(a,b){ return a.start.localeCompare(b.start); });
 
-  var lvSym = '<div class="gh-sym small"><svg viewBox="0 0 288 132" class="car" style="'
-    + '--body:rgba(255,255,255,.9);--glass:rgba(255,255,255,.38);--accent:rgba(255,255,255,.55);'
-    + '--wheel:#0A7A37;--shade:rgba(255,255,255,.5);--edge:rgba(255,255,255,0)">'
+  var lvSym = '<div class="gh-sym small"><svg viewBox="0 0 288 132" class="car" style="' + SKIN_MONO + '">'
     + '<use href="#carnival"/>'
     + '<line x1="26" y1="116" x2="262" y2="16" stroke="rgba(255,255,255,.55)" stroke-width="20" stroke-linecap="round"/>'
     + '<line x1="26" y1="116" x2="262" y2="16" stroke="#00B14F" stroke-width="9" stroke-linecap="round"/>'
@@ -1167,9 +1300,9 @@ function renderModal(){
    ============================================================ */
 function bind(){
   // 탭
-  each('[data-tab]', function(el){ el.onclick = function(){ tab = el.dataset.tab; view = null; render(); }; });
+  each('[data-tab]', function(el){ el.onclick = function(){ setTab(el.dataset.tab); }; });
   var back = document.getElementById('back');
-  if(back) back.onclick = function(){ view = null; render(); };
+  if(back) back.onclick = function(){ closeView(); };
 
   // 홈
   each('[data-book]', function(el){
@@ -1184,28 +1317,46 @@ function bind(){
   });
   each('[data-cancel]', function(el){
     el.onclick = function(){
-      modal = { type:'confirm', title:'탑승을 취소할까요?', desc:'다시 다른 차량을 고르실 수 있습니다.', ok:'취소하기', danger:true,
-                run:function(){ cancelBook().then(function(){ toast('취소되었습니다'); }); } };
-      render();
+      openModal({ type:'confirm', title:'탑승을 취소할까요?', desc:'다시 다른 차량을 고르실 수 있습니다.', ok:'취소하기', danger:true,
+                run:function(){ cancelBook().then(function(){ toast('취소되었습니다'); }); } });
     };
   });
+  // 차량 메모
+  each('[data-addmemo]', function(el){
+    el.onclick = function(){
+      var id = +el.dataset.addmemo;
+      openModal({ type:'text', title: id + '호차 메모', ph:'예: 오늘 20분 지연 / 정문 앞 대기', value:'',
+        run:function(v){
+          v = (v||'').trim();
+          if(!v) return;
+          addMemo(id, v).then(function(){ toast('메모를 등록했습니다'); })
+                        .catch(function(e){ toast(e.message); });
+        }});
+    };
+  });
+  each('[data-delmemo]', function(el){
+    el.onclick = function(){
+      var p = el.dataset.delmemo.split('|');
+      delMemo(+p[0], p[1]).then(function(){ toast('메모를 삭제했습니다'); });
+    };
+  });
+
   var gl = document.getElementById('goLeave');
-  if(gl) gl.onclick = function(){ view = 'leave'; draft = {reason:'own', start:today, end:today, quick:'today', editId:null}; render(); };
+  if(gl) gl.onclick = function(){ draft = {reason:'own', start:today, end:today, quick:'today', editId:null}; openView('leave'); };
 
   var el = document.getElementById('editLeave');
   if(el) el.onclick = function(){
     var lv = myLeaveToday();
     if(!lv) return;
     draft = { reason:lv.reason, start:lv.start, end:lv.end, quick:'custom', editId:lv.id };
-    view = 'leave'; render();
+    openView('leave');
   };
   var cl = document.getElementById('cancelLeave');
   if(cl) cl.onclick = function(){
     var lv = myLeaveToday();
     if(!lv) return;
-    modal = { type:'confirm', title:'미이용 등록을 취소할까요?', desc:'다시 탑승 차량을 고르실 수 있습니다.', ok:'등록 취소', danger:true,
-      run:function(){ delLeave(lv.id).then(function(){ toast('취소되었습니다'); }); } };
-    render();
+    openModal({ type:'confirm', title:'미이용 등록을 취소할까요?', desc:'다시 탑승 차량을 고르실 수 있습니다.', ok:'등록 취소', danger:true,
+      run:function(){ delLeave(lv.id).then(function(){ toast('취소되었습니다'); }); } });
   };
 
   // 미이용
@@ -1216,8 +1367,9 @@ function bind(){
       if(k === 'today'){ draft.start = today; draft.end = today; }
       else if(k === 'tomorrow'){ draft.start = today; draft.end = addDays(today, 1); }
       else if(k === 'week'){
+        // 이번 주 = 오늘부터 이번 주 토요일까지 (월~토 운행)
         var d = parseDate(today), dow = d.getDay();
-        draft.start = today; draft.end = addDays(today, dow === 0 ? 5 : (5 - dow < 0 ? 0 : 5 - dow));
+        draft.start = today; draft.end = addDays(today, dow === 0 ? 6 : (6 - dow));
       }
       render();
     };
@@ -1235,15 +1387,14 @@ function bind(){
     var p = myEntry() ? cancelBook().catch(function(){}) : Promise.resolve();
     if(edit) p = p.then(function(){ return delLeave(edit); });
     p.then(function(){ return addLeave(draft.reason, draft.start, draft.end); })
-     .then(function(){ view = null; draft.editId = null; toast(edit ? '변경되었습니다' : '미이용으로 등록되었습니다'); render(); })
+     .then(function(){ draft.editId = null; toast(edit ? '변경되었습니다' : '미이용으로 등록되었습니다'); closeView(); })
      .catch(function(e){ sl.disabled = false; toast('실패: ' + e.message); });
   };
   var dl = document.getElementById('delEditLeave');
   if(dl) dl.onclick = function(){
     var id = draft.editId;
-    modal = { type:'confirm', title:'미이용 등록을 취소할까요?', desc:'다시 탑승 차량을 고르실 수 있습니다.', ok:'등록 취소', danger:true,
-      run:function(){ delLeave(id).then(function(){ view = null; draft.editId = null; toast('취소되었습니다'); render(); }); } };
-    render();
+    openModal({ type:'confirm', title:'미이용 등록을 취소할까요?', desc:'다시 탑승 차량을 고르실 수 있습니다.', ok:'등록 취소', danger:true,
+      run:function(){ delLeave(id).then(function(){ draft.editId = null; toast('취소되었습니다'); closeView(); }); } });
   };
 
   // 내정보
@@ -1261,23 +1412,21 @@ function bind(){
   };
   var cn = document.getElementById('chName');
   if(cn) cn.onclick = function(){
-    modal = { type:'text', title:'이름 변경', value:me.name, ph:'이름',
+    openModal({ type:'text', title:'이름 변경', value:me.name, ph:'이름',
       run:function(v){
         if(!v || v.trim().length < 2) return toast('두 글자 이상 입력해 주세요');
         db.collection('users').doc(uid).update({ name: v.trim() }).then(function(){ toast('변경되었습니다'); });
-      }};
-    render();
+      }});
   };
   var ga = document.getElementById('goAdmin');
   if(ga) ga.onclick = function(){
-    if(isAdmin()){ view = 'admin'; render(); return; }
-    modal = { type:'pin', title:'관리자 PIN', desc:'4자리 숫자를 입력해 주세요.',
+    if(isAdmin()){ openView('admin'); return; }
+    openModal({ type:'pin', title:'관리자 PIN', desc:'4자리 숫자를 입력해 주세요.',
       run:function(v){
         if(v === (config.adminPin || '0000')){
-          db.collection('users').doc(uid).update({ role:'admin' }).then(function(){ view='admin'; render(); });
+          db.collection('users').doc(uid).update({ role:'admin' }).then(function(){ openView('admin'); });
         } else toast('PIN이 맞지 않습니다');
-      }};
-    render();
+      }});
   };
 
   // 관리자
@@ -1308,23 +1457,21 @@ function bind(){
     saveConfig({ tempHolidayDate: config.tempHolidayDate === today ? null : today });
   };
   var ed = document.getElementById('edDrivers');
-  if(ed) ed.onclick = function(){ modal = { type:'drivers' }; render(); };
+  if(ed) ed.onclick = function(){ openModal({ type:'drivers' }); };
   var eu = document.getElementById('edUsers');
-  if(eu) eu.onclick = function(){ modal = { type:'users' }; render(); };
+  if(eu) eu.onclick = function(){ openModal({ type:'users' }); };
   var ep = document.getElementById('edPin');
   if(ep) ep.onclick = function(){
-    modal = { type:'pin', title:'새 관리자 PIN', desc:'앞으로 사용할 4자리 숫자입니다.',
+    openModal({ type:'pin', title:'새 관리자 PIN', desc:'앞으로 사용할 4자리 숫자입니다.',
       run:function(v){
         if(!/^\d{4}$/.test(v)) return toast('숫자 4자리를 입력해 주세요');
         saveConfig({ adminPin: v }).then(function(){ toast('PIN이 변경되었습니다'); });
-      }};
-    render();
+      }});
   };
   var rb = document.getElementById('resetBoard');
   if(rb) rb.onclick = function(){
-    modal = { type:'confirm', title:'오늘 탑승 명단을 모두 지울까요?', desc:'되돌릴 수 없습니다. 미이용 등록은 유지됩니다.', ok:'초기화', danger:true,
-      run:function(){ db.collection('board').doc(today).set({ entries:{}, date:today }).then(function(){ toast('초기화되었습니다'); }); } };
-    render();
+    openModal({ type:'confirm', title:'오늘 탑승 명단을 모두 지울까요?', desc:'되돌릴 수 없습니다. 미이용 등록과 메모는 유지됩니다.', ok:'초기화', danger:true,
+      run:function(){ db.collection('board').doc(today).set({ entries:{}, date:today, memos:(board&&board.memos)||{} }).then(function(){ toast('초기화되었습니다'); }); } });
   };
 
   bindModal();
@@ -1334,7 +1481,7 @@ function bindModal(){
   if(!modal) return;
   var root = document.getElementById('modal');
   if(!root) return;
-  root.onclick = function(e){ if(e.target === root){ modal = null; render(); } };
+  root.onclick = function(e){ if(e.target === root){ closeModal(); } };
 
   each('[data-deluser]', function(el){
     el.onclick = function(){
@@ -1346,24 +1493,24 @@ function bindModal(){
     el.onclick = function(){
       var ok = el.dataset.mc === '1';
       var m = modal;
-      if(!ok){ modal = null; render(); return; }
+      if(!ok){ closeModal(); return; }
       if(m.type === 'pin'){
         var v = (document.getElementById('pin')||{}).value || '';
-        modal = null; render(); if(m.run) m.run(v.trim()); return;
+        closeModal(); if(m.run) m.run(v.trim()); return;
       }
       if(m.type === 'text'){
         var t = (document.getElementById('mtext')||{}).value || '';
-        modal = null; render(); if(m.run) m.run(t); return;
+        closeModal(); if(m.run) m.run(t); return;
       }
       if(m.type === 'drivers'){
         var list = drivers().slice();
         each('.drName', function(inp){ list[+inp.dataset.i].name = inp.value.trim(); });
         each('.drPhone', function(inp){ list[+inp.dataset.i].phone = inp.value.trim(); });
-        modal = null;
+        closeModal();
         saveConfig({ drivers: list }).then(function(){ toast('저장되었습니다'); });
         return;
       }
-      modal = null; render(); if(m.run) m.run();
+      closeModal(); if(m.run) m.run();
     };
   });
 
