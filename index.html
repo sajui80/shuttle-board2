@@ -341,6 +341,15 @@ a.merow,a.merow:visited{color:var(--text);text-decoration:none;}
 }
 .banner.red{background:var(--danger-tint);border-color:#F7CDD2;color:#B3141F;}
 .empty{color:var(--muted);font-size:12px;padding:6px 2px;}
+/* 마감 현황 복사 */
+.copybtn{display:flex;align-items:center;justify-content:center;gap:8px;margin:6px 0 8px;}
+.copybtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+.copyhint{font-size:11.5px;color:var(--muted);line-height:1.6;margin:0 2px 18px;}
+.sharebox{width:100%;height:210px;margin-top:14px;padding:12px;border-radius:12px;
+  border:1px solid var(--line);background:var(--bg);color:var(--text);
+  font-family:var(--font);font-size:12.5px;line-height:1.7;resize:none;
+  -webkit-user-select:text;user-select:text;}
 /* 차량 메모 */
 .memos{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:9px 0 1px;}
 .memo{display:inline-flex;align-items:center;gap:5px;max-width:100%;
@@ -610,6 +619,52 @@ function addMemo(carId, text){
 }
 function delMemo(carId, id){
   return saveMemos(carId, memosOf(carId).filter(function(m){ return m.id !== id; }));
+}
+
+/* ---------- 마감 현황 텍스트 (메신저 붙여넣기용) ---------- */
+function summaryText(){
+  var out = '[퇴근셔틀] ' + fmtKo(today) + ' 마감 현황\n';
+  cars().forEach(function(c, i){
+    var dr = driverFor(i);
+    var rid = ridersOf(c.id);
+    var mm = memosOf(c.id);
+    out += '\n' + c.id + '호차  ' + c.time + '  기사 ' + dr.name + '\n';
+    out += '· ' + (rid.length ? rid.map(function(r){ return r.name; }).join(', ') : '없음') + '\n';
+    if(mm.length){
+      out += '· 메모 ' + mm.map(function(m){ return m.text; }).join(' / ') + '\n';
+    }
+  });
+
+  var lv = todaysLeaves();
+  out += '\n🚫 미이용 : ' + (lv.length
+    ? lv.map(function(l){ return l.name + '(' + reasonLabel(l.reason) + ')'; }).join(', ')
+    : '없음') + '\n';
+
+  var miss = missingUsers();
+  out += '⚠️ 미입력 : ' + (miss.length
+    ? miss.map(function(u){ return u.name; }).join(', ')
+    : '없음 (전원 입력 완료)') + '\n';
+
+  return out;
+}
+function copyText(t){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(t);
+  }
+  return new Promise(function(res, rej){
+    var ta = document.getElementById('shareTxt');
+    if(!ta) return rej(new Error('NO_TA'));
+    ta.removeAttribute('readonly');
+    ta.focus(); ta.select();
+    try { ta.setSelectionRange(0, 999999); } catch(e){}
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch(e){}
+    ta.setAttribute('readonly', '');
+    ok ? res() : rej(new Error('EXEC'));
+  });
+}
+function openSummary(){
+  openModal({ type:'share', title:'오늘 마감 현황', text: summaryText() });
 }
 function todaysLeaves(){
   return leaves.filter(function(l){ return l.start <= today && today <= l.end; });
@@ -1120,6 +1175,11 @@ function viewStatus(){
   return '<div class="ghead" style="padding-bottom:28px"><div class="ghead-in">'
     + '<div class="date">' + fmtKo(today) + '</div><div class="hello">오늘 입력 현황</div></div></div>'
     + '<div class="scroll"><div class="sheet">'
+    + '<button class="btn btn-pri btn-block copybtn" id="copySum">'
+    +   '<svg viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11.5" height="12.5" rx="2.4"/>'
+    +   '<path d="M15.5 5.5H6.4A2.4 2.4 0 0 0 4 7.9V17"/></svg>'
+    +   '마감 현황 복사하기</button>'
+    + '<div class="copyhint">차량별 기사 · 출발시간 · 탑승자 · 메모를 한 번에 복사합니다. 메신저에 그대로 붙여넣으세요.</div>'
     + '<div class="card"><div class="prog-top"><div class="prog-n">' + done + '<small> / ' + total + '</small></div>'
     +   '<div class="prog-l">' + pct + '% 입력 완료</div></div>'
     +   '<div class="bar"><i style="width:' + pct + '%"></i></div></div>'
@@ -1273,6 +1333,12 @@ function renderModal(){
          + '<div class="field"><input id="mtext" type="text" value="' + esc(m.value||'') + '" placeholder="' + esc(m.ph||'') + '"></div>'
          + '<div class="modal-row"><button class="btn btn-out" data-mc="0">취소</button>'
          + '<button class="btn btn-pri" data-mc="1">저장</button></div>';
+  } else if(m.type === 'share'){
+    body = '<div class="modal-h">' + esc(m.title) + '</div>'
+         + '<div class="modal-p">아래 내용이 복사됩니다. 메신저에 붙여넣으세요.</div>'
+         + '<textarea class="sharebox" id="shareTxt" readonly>' + esc(m.text) + '</textarea>'
+         + '<div class="modal-row"><button class="btn btn-out" data-mc="0">닫기</button>'
+         + '<button class="btn btn-pri" data-mc="1">복사하기</button></div>';
   } else if(m.type === 'drivers'){
     body = '<div class="modal-h">기사 정보</div><div class="modal-p">이름과 전화번호를 수정할 수 있습니다.</div>'
          + drivers().map(function(d,i){
@@ -1452,6 +1518,9 @@ function bind(){
       saveConfig({ holidays: hol });
     };
   });
+  var cs2 = document.getElementById('copySum');
+  if(cs2) cs2.onclick = function(){ openSummary(); };
+
   var tt = document.getElementById('tgTemp');
   if(tt) tt.onclick = function(){
     saveConfig({ tempHolidayDate: config.tempHolidayDate === today ? null : today });
@@ -1494,6 +1563,12 @@ function bindModal(){
       var ok = el.dataset.mc === '1';
       var m = modal;
       if(!ok){ closeModal(); return; }
+      if(m.type === 'share'){
+        copyText(m.text)
+          .then(function(){ closeModal(); toast('복사되었습니다. 메신저에 붙여넣으세요'); })
+          .catch(function(){ toast('아래 내용을 길게 눌러 직접 복사해 주세요'); });
+        return;
+      }
       if(m.type === 'pin'){
         var v = (document.getElementById('pin')||{}).value || '';
         closeModal(); if(m.run) m.run(v.trim()); return;
