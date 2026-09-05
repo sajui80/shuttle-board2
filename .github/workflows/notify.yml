@@ -2,8 +2,8 @@ name: 퇴근셔틀 알림
 
 on:
   schedule:
-    - cron: '45 10 * * 1-5'   # UTC 10:45 = IST 16:15 기동 → 16:30 발송
-    - cron: '15 11 * * 1-5'   # UTC 11:15 = IST 16:45 기동 → 17:00 발송
+    - cron: '45 10 * * 1-6'   # UTC 10:45 = IST 16:15 기동 → 16:30 발송 (월~토)
+    - cron: '15 11 * * 1-6'   # UTC 11:15 = IST 16:45 기동 → 17:00 발송 (월~토)
   workflow_dispatch:
     inputs:
       mode:
@@ -31,7 +31,7 @@ jobs:
 
       - name: 발송 종류 결정
         run: |
-          if [ "${{ github.event.schedule }}" = "15 11 * * 1-5" ]; then
+          if [ "${{ github.event.schedule }}" = "15 11 * * 1-6" ]; then
             echo "MODE=summary" >> $GITHUB_ENV
           elif [ -n "${{ inputs.mode }}" ]; then
             echo "MODE=${{ inputs.mode }}" >> $GITHUB_ENV
