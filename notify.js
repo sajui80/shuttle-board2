@@ -55,7 +55,7 @@ function driverFor(slotIdx, drivers, todayStr) {
   const today = istDate();
   const wd = istWeekday();
 
-  if (['Sat', 'Sun'].includes(wd)) { log('주말 — 발송하지 않습니다.'); return; }
+  if (wd === 'Sun') { log('일요일 — 발송하지 않습니다.'); return; }   // 월~토 운행
 
   const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
   if (!raw) { console.error('FIREBASE_SERVICE_ACCOUNT 시크릿이 없습니다.'); process.exit(1); }
