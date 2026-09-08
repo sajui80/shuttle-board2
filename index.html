@@ -15,7 +15,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyBgg9e-IeBU39YalD8t4NCuHd4nAfhROw4",
@@ -30,17 +29,18 @@
 
 <style>
 :root{
-  --brand:#00B14F; --brand-dark:#00913F; --brand-light:#1FC16B;
-  --tint:#E8F8EF; --tint-2:#CFEFDD; --glass:#CDEFDD;
-  --surface:#FFFFFF; --bg:#F4F6F8;
-  --text:#1A1A1A; --text-2:#4A4A4A; --muted:#8A8A8A; --line:#EAEDEF;
-  --warn:#FF8A00; --danger:#E5202E; --danger-tint:#FDECEE;
+  --brand:#B25E08; --brand-dark:#8F4A06; --brand-light:#D97D1E; --header:#2F3944;
+  --tint:#FBF0E2; --tint-2:#F0D6AE; --glass:#CDEFDD;
+  --surface:#FFFFFF; --bg:#F1F2F4;
+  --text:#14171A; --text-2:#3B434B; --muted:#606A74; --line:#DEE2E6;
+  --warn:#A85A08; --warn-tint:#FCF2E2; --danger:#B3261E; --danger-tint:#FAE8E6;
+  --danger-line:#F2CFCB; --ok:#146C43;
   --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --mono:ui-monospace,"Roboto Mono",SFMono-Regular,Menlo,Consolas,monospace;
-  --r-trip:#2563EB; --rb-trip:#E9F0FD;
-  --r-vac:#0E8F9C;  --rb-vac:#E1F4F6;
-  --r-own:#7C3AED;  --rb-own:#F1EAFE;
-  --r-etc:#5B6B7C;  --rb-etc:#EDF1F5;
+  --r-trip:#1D4ED8; --rb-trip:#E3EBFD;
+  --r-vac:#0F766E;  --rb-vac:#DDF0EE;
+  --r-own:#6D28D9;  --rb-own:#EEE6FD;
+  --r-etc:#475569;  --rb-etc:#E7EDF3;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 /* 당겨서 새로고침 차단: 문서 자체는 스크롤하지 않고, 안쪽 .scroll 만 스크롤한다 */
@@ -52,7 +52,7 @@ html,body{
 }
 body{
   background:var(--bg); color:var(--text); font-family:var(--font);
-  font-size:13px; line-height:1.5; -webkit-font-smoothing:antialiased;
+  font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased;
   position:fixed; inset:0; width:100%;
 }
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
@@ -62,15 +62,15 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 
 /* ---------- 로딩 / 스플래시 ---------- */
 .splash{
-  position:fixed;inset:0;background:var(--brand);z-index:100;
+  position:fixed;inset:0;background:var(--header);z-index:100;
   display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;
   transition:opacity .35s ease;
 }
 .splash.hide{opacity:0;pointer-events:none;}
 .splash svg{width:230px;max-width:62vw;margin-bottom:24px;
-  --body:#FFFFFF;--body2:#DCEFE4;--glass:#B6E8CE;--glass2:#D8F4E7;--trim:#CFEADC;
-  --accent:#00913F;--edge:rgba(255,255,255,0);--pillar:#0C6B34;--tire:#0A5F2E;
-  --rim:#E8F6EE;--lamp:#8FD3B0;--tail:#E5202E;}
+  --body:#FFFFFF;--body2:#E2E4E6;--glass:#9AA5AE;--glass2:#C2CAD1;--trim:#D8DBDE;
+  --accent:#2F3944;--edge:rgba(255,255,255,0);--pillar:#1E252C;--tire:#161C22;
+  --rim:#EEF0F1;--lamp:#F2C14E;--tail:#E5202E;}
 .splash .logo{font-size:29px;font-weight:900;letter-spacing:-.035em;}
 .splash .tag{font-size:12px;opacity:.85;margin-top:5px;letter-spacing:.06em;}
 .splash .err{
@@ -86,13 +86,13 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 
 /* ---------- 온보딩 ---------- */
 .ob{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--surface);overflow-y:auto;overscroll-behavior:contain;}
-.ob-top{background:var(--brand);padding:28px 0 34px;display:flex;justify-content:center;}
+.ob-top{background:var(--header);padding:28px 0 34px;display:flex;justify-content:center;}
 .ob-top svg{width:212px;}
 .ob-icon{width:88px;height:88px;border-radius:28px;background:rgba(255,255,255,.19);display:flex;align-items:center;justify-content:center;}
 .ob-icon svg{width:42px;height:42px;fill:#fff;}
 .ob-sheet{background:var(--surface);border-radius:28px 28px 0 0;margin-top:-26px;flex:1;min-height:340px;padding:28px 22px 26px;display:flex;flex-direction:column;}
-.ob-h{font-size:23px;font-weight:900;letter-spacing:-.025em;line-height:1.3;}
-.ob-p{font-size:13px;color:var(--muted);line-height:1.65;margin-top:9px;}
+.ob-h{font-size:26px;font-weight:900;letter-spacing:-.025em;line-height:1.3;}
+.ob-p{font-size:14.5px;color:var(--text-2);line-height:1.7;margin-top:10px;}
 .field{margin-top:22px;}
 .field label{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.07em;}
 .field input{
@@ -100,27 +100,30 @@ input,select,textarea{font-family:inherit;font-size:16px;}
   padding:13px 15px;font-weight:700;outline:none;background:var(--surface);color:var(--text);
 }
 .field input:focus{border-color:var(--brand);}
-.hint{font-size:11.5px;color:var(--muted);margin-top:8px;padding-left:3px;line-height:1.5;min-height:17px;}
+.hint{font-size:13px;color:var(--muted);margin-top:9px;padding-left:3px;line-height:1.55;min-height:19px;}
 .hint.warn{color:var(--warn);font-weight:700;}
 .hint.bad{color:var(--danger);font-weight:700;}
 
 /* ---------- 헤더 ---------- */
-.ghead{background:var(--brand);padding:0 0 30px;flex-shrink:0;}
+.ghead{background:var(--header);padding:0 0 30px;flex-shrink:0;}
 .ghead-in{padding:14px 20px 0;color:#fff;position:relative;}
-.ghead .date{font-size:14.5px;opacity:.92;font-weight:700;letter-spacing:-.01em;}
-.gh-sym{position:absolute;right:14px;top:6px;width:108px;pointer-events:none;}
-.gh-sym.small{width:88px;top:12px;}
+.ghead .date{font-size:15.5px;opacity:.95;font-weight:700;letter-spacing:-.01em;}
+.gh-sym{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:108px;pointer-events:none;}
+.gh-sym.front{width:106px;}
+.gh-sym.cal{width:72px;}
+.has-sym.front-sym .date,.has-sym.front-sym .hello{padding-right:114px;}
+.has-sym.cal-sym .date,.has-sym.cal-sym .hello{padding-right:82px;}
 .gh-sym svg{width:100%;height:auto;display:block;}
 .has-sym .date,.has-sym .hello{padding-right:112px;}
 .has-sym.small-sym .date,.has-sym.small-sym .hello{padding-right:96px;}
-.ghead .hello{font-size:20px;font-weight:800;letter-spacing:-.01em;margin-top:2px;}
+.ghead .hello{font-size:22px;font-weight:800;letter-spacing:-.01em;margin-top:3px;}
 .ghead.admin{background:var(--text);}
 .countdown{
   display:inline-flex;align-items:center;gap:6px;margin-top:13px;
   background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);
-  color:#fff;border-radius:999px;padding:6px 13px;font-size:12px;font-weight:700;
+  color:#fff;border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:700;
 }
-.backbtn{font-size:14.5px;font-weight:700;opacity:.95;padding:4px 0;display:inline-block;}
+.backbtn{font-size:16px;font-weight:700;opacity:.98;padding:6px 0;display:inline-block;}
 /* 미이용 화면 가독성 */
 .lvsheet .seclbl{font-size:13.5px;font-weight:800;color:var(--text-2);letter-spacing:.02em;margin:22px 4px 10px;}
 .lvsheet .rsn{padding:13px 4px 11px;}
@@ -135,13 +138,13 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .lvsheet .dpreview{padding:13px 15px;}
 .lvsheet .dp-t{font-size:14.5px;}
 .lvsheet .dp-d{font-size:12.5px;}
-.lvsheet .dnote{font-size:12.5px;line-height:1.7;}
+.lvsheet .dnote{font-size:13.5px;line-height:1.75;}
 .lvsheet .lv-d{font-size:12.5px;}
 .lvsheet .rsnchip{font-size:12px;}
 
 .sheet{background:var(--bg);border-radius:26px 26px 0 0;margin-top:-24px;padding:20px 16px 26px;min-height:100%;}
 .scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
-.seclbl{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.09em;margin:20px 4px 9px;}
+.seclbl{font-size:12.5px;font-weight:800;color:var(--text-2);letter-spacing:.06em;margin:22px 4px 10px;}
 .seclbl:first-child{margin-top:2px;}
 .card{background:var(--surface);border-radius:18px;padding:15px;box-shadow:0 1px 3px rgba(16,24,20,.07);}
 .group{border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(16,24,20,.07);}
@@ -155,9 +158,9 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .mystat.none .ic{background:var(--danger);}
 .mystat.ok .ic{background:var(--brand);}
 .mystat.leave .ic{background:#7A8794;}
-.mystat .t{font-size:14px;font-weight:800;letter-spacing:-.01em;}
+.mystat .t{font-size:16.5px;font-weight:800;letter-spacing:-.01em;}
 .mystat.none .t{color:#B3141F;} .mystat.ok .t{color:var(--brand-dark);} .mystat.leave .t{color:#455160;}
-.mystat .d{font-size:11.5px;color:var(--text-2);margin-top:2px;line-height:1.5;}
+.mystat .d{font-size:13.5px;color:var(--text-2);margin-top:4px;line-height:1.55;}
 .lvbtns{display:flex;gap:6px;margin-top:11px;}
 .lvbtns .btn{flex:1;background:var(--surface);border-color:#D5DCE3;color:#455160;}
 
@@ -168,15 +171,15 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .cc-top{display:flex;align-items:center;gap:8px;}
 .cc-badge{width:22px;height:22px;border-radius:8px;background:var(--brand);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .carcard.closed .cc-badge{background:var(--muted);}
-.cc-name{font-size:14px;font-weight:800;}
+.cc-name{font-size:16.5px;font-weight:800;}
 .picktag{font-size:10px;font-weight:800;background:var(--brand);color:#fff;padding:2px 8px;border-radius:999px;}
-.cc-time{margin-left:auto;font-family:var(--mono);font-size:17px;font-weight:600;font-variant-numeric:tabular-nums;}
-.cc-art{margin:3px 0 5px;border-radius:12px;padding:4px 8px 0;background:linear-gradient(180deg,#F2FAF5 0%,#E9F6EF 100%);}
-.cc-art.warn{background:linear-gradient(180deg,#FFF6EA 0%,#FDEFDD 100%);}
+.cc-time{margin-left:auto;font-family:var(--mono);font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;}
+.cc-art{margin:5px 0 7px;border-radius:12px;padding:5px 8px 0;background:linear-gradient(180deg,#F7F7F6 0%,#ECEDEC 100%);}
+.cc-art.warn{background:linear-gradient(180deg,#FDF4E6 0%,#F8EAD4 100%);}
 .cc-art.full{background:linear-gradient(180deg,#F5F7F6 0%,#EDF0EE 100%);}
 .cc-art .car{max-width:132px;margin:0 auto;}
 .cc-mid{display:flex;align-items:center;gap:8px;}
-.cc-driver{font-size:12px;color:var(--text-2);}
+.cc-driver{font-size:13.5px;color:var(--text-2);}
 .cc-driver b{color:var(--text);font-weight:700;}
 .callbtn{width:28px;height:28px;border-radius:999px;background:var(--tint);border:1px solid var(--tint-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .picked .callbtn{background:#fff;}
@@ -185,75 +188,76 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .seats{display:flex;gap:3px;}
 .seats i{display:block;width:11px;height:6px;border-radius:3px;background:var(--line);}
 .seats i.on{background:var(--brand);} .seats i.warn{background:var(--warn);} .seats i.full{background:var(--danger);}
-.cc-cnt{font-size:11px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.cc-cnt{font-size:13px;font-weight:800;color:var(--text-2);font-variant-numeric:tabular-nums;white-space:nowrap;}
 .cc-cnt.warn{color:var(--warn);} .cc-cnt.full{color:var(--danger);}
 .cc-foot{display:flex;align-items:center;gap:8px;margin-top:10px;}
 .riders{display:flex;flex-wrap:wrap;gap:4px;flex:1;}
-.riders span{font-size:10.5px;background:var(--bg);color:var(--text-2);padding:2px 7px;border-radius:999px;}
+.riders span{font-size:12.5px;background:var(--bg);color:var(--text-2);padding:4px 10px;border-radius:999px;font-weight:600;}
 .riders span.me{background:var(--brand);color:#fff;font-weight:700;}
 .picked .riders span{background:#fff;}
 .picked .riders span.me{background:var(--brand);color:#fff;}
 
 .carcard.slim{padding:11px 13px 10px;}
 .slim-top{display:flex;align-items:center;gap:10px;}
-.slim-art{width:64px;flex-shrink:0;border-radius:10px;padding:3px 4px 0;background:linear-gradient(180deg,#F2FAF5 0%,#E9F6EF 100%);}
-.slim-art.warn{background:linear-gradient(180deg,#FFF6EA 0%,#FDEFDD 100%);}
+.slim-art{width:72px;flex-shrink:0;border-radius:10px;padding:3px 4px 0;background:linear-gradient(180deg,#F7F7F6 0%,#ECEDEC 100%);}
+.slim-art.warn{background:linear-gradient(180deg,#FDF4E6 0%,#F8EAD4 100%);}
 .slim-art.full{background:linear-gradient(180deg,#F5F7F6 0%,#EDF0EE 100%);}
 .slim-main{flex:1;min-width:0;}
 .slim-r1{display:flex;align-items:center;gap:7px;}
-.slim-r1 .cc-time{font-size:15px;}
+.slim-r1 .cc-time{font-size:17px;}
 .slim-r2{display:flex;align-items:center;gap:7px;margin-top:5px;}
 .slim-r2 .callbtn{width:25px;height:25px;}
 .slim-r2 .callbtn svg{width:12px;height:12px;}
-.carcard.slim .cc-name{font-size:13.5px;}
+.carcard.slim .cc-name{font-size:15.5px;}
 .carcard.slim .cc-badge{width:20px;height:20px;border-radius:7px;font-size:11px;}
-.carcard.slim .cc-driver{white-space:nowrap;font-size:11.5px;}
-.carcard.slim .cc-cnt{margin-left:auto;font-size:11.5px;font-weight:800;color:var(--brand-dark);}
+.carcard.slim .cc-driver{white-space:nowrap;font-size:13px;}
+.carcard.slim .cc-cnt{margin-left:auto;font-size:13px;font-weight:800;color:var(--brand-dark);}
 .carcard.slim .cc-cnt.full{color:var(--danger);}
 .carcard.slim .cc-cnt.warn{color:var(--warn);}
 
 /* ---------- 버튼 ---------- */
-.btn{display:flex;align-items:center;justify-content:center;gap:6px;border-radius:999px;font-weight:800;font-size:13.5px;padding:13px 18px;}
+.btn{display:flex;align-items:center;justify-content:center;gap:7px;border-radius:999px;font-weight:800;font-size:16px;padding:15px 20px;letter-spacing:-.01em;}
 .btn-pri{background:var(--brand);color:#fff;}
 .btn-pri:active{background:var(--brand-dark);}
 .btn-pri:disabled{background:#D6DBD8;color:#fff;}
-.btn-out{background:transparent;color:var(--brand-dark);border:1.5px solid var(--tint-2);}
+.btn-out{background:var(--surface);color:var(--brand-dark);border:1.8px solid var(--tint-2);}
 .picked .btn-out{background:#fff;}
 .btn-dark{background:var(--text);color:#fff;}
 .btn-danger{background:var(--danger);color:#fff;}
-.btn-sm{padding:7px 15px;font-size:12px;}
-.btn-txt{color:var(--muted);font-weight:700;font-size:12.5px;text-align:center;padding:11px;width:100%;}
+.btn-sm{padding:11px 22px;font-size:15px;border-radius:999px;}
+.btn-txt{color:var(--muted);font-weight:700;font-size:14px;text-align:center;padding:13px;width:100%;}
 .btn-block{width:100%;}
 
 /* ---------- 탭바 ---------- */
 .tabbar{display:flex;background:var(--surface);border-top:1px solid var(--line);padding:8px 0 max(10px,env(safe-area-inset-bottom));flex-shrink:0;}
-.tab{flex:1;text-align:center;font-size:10px;font-weight:700;color:var(--muted);padding:0;}
+.tab{flex:1;text-align:center;font-size:11.5px;font-weight:800;color:var(--muted);padding:0;}
 .tab svg{width:21px;height:21px;display:block;margin:0 auto 2px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
 .tab.on{color:var(--brand);}
 
 /* ---------- 현황 ---------- */
 .prog-top{display:flex;align-items:flex-end;justify-content:space-between;}
-.prog-n{font-family:var(--mono);font-size:26px;font-weight:600;}
-.prog-n small{font-size:14px;color:var(--muted);}
-.prog-l{font-size:11px;color:var(--muted);font-weight:700;}
+.prog-n{font-family:var(--mono);font-size:30px;font-weight:700;}
+.prog-n small{font-size:16px;color:var(--muted);}
+.prog-l{font-size:13px;color:var(--text-2);font-weight:700;}
 .bar{height:7px;background:var(--line);border-radius:99px;margin-top:10px;overflow:hidden;}
 .bar i{display:block;height:100%;background:var(--brand);border-radius:99px;transition:width .3s;}
 .strow{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);align-items:baseline;}
 .strow:last-child{border-bottom:none;}
-.strow .sl{width:64px;flex-shrink:0;font-size:12px;font-weight:800;}
-.strow .sl em{display:block;font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--muted);font-weight:400;}
-.strow .sn{font-size:11.5px;color:var(--text-2);line-height:1.8;flex:1;}
-.chip{display:inline-block;font-size:11px;padding:2px 9px;border-radius:999px;background:var(--bg);color:var(--text-2);margin:0 3px 3px 0;}
-.chip.miss{background:var(--danger-tint);color:#B3141F;font-weight:700;}
+.strow .sl{width:74px;flex-shrink:0;font-size:14px;font-weight:800;}
+.strow .sl em{display:block;font-style:normal;font-family:var(--mono);font-size:12.5px;color:var(--muted);font-weight:500;margin-top:2px;}
+.strow .sn{font-size:13.5px;color:var(--text-2);line-height:1.85;flex:1;}
+.chip{display:inline-block;font-size:13px;padding:4px 11px;border-radius:999px;background:var(--bg);color:var(--text-2);margin:0 4px 4px 0;font-weight:600;}
+.chip.miss{background:var(--danger-tint);color:#93211A;font-weight:800;}
+.notice.warn .chip.miss{background:#FFFFFF;color:#93211A;}
 .chip.me{background:var(--brand);color:#fff;font-weight:700;}
-.rsnchip{display:inline-flex;align-items:center;gap:4px;font-weight:700;padding:3px 9px 3px 7px;margin:0 3px 3px 0;border-radius:999px;font-size:11px;}
-.rsnchip svg{width:12px;height:12px;flex-shrink:0;}
+.rsnchip{display:inline-flex;align-items:center;gap:5px;font-weight:700;padding:4px 11px 4px 8px;margin:0 4px 4px 0;border-radius:999px;font-size:12.5px;}
+.rsnchip svg{width:14px;height:14px;flex-shrink:0;}
 .icn{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .r-trip{color:var(--r-trip);background:var(--rb-trip);}
 .r-vac{color:var(--r-vac);background:var(--rb-vac);}
 .r-own{color:var(--r-own);background:var(--rb-own);}
 .r-etc{color:var(--r-etc);background:var(--rb-etc);}
-.lv-line{display:block;font-size:11.5px;color:var(--text-2);line-height:1.9;}
+.lv-line{display:block;font-size:13.5px;color:var(--text-2);line-height:1.95;}
 .lv-line em{font-style:normal;color:var(--muted);font-size:10.5px;margin-left:4px;font-family:var(--mono);}
 
 /* ---------- 미이용 ---------- */
@@ -262,7 +266,7 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .rsn.on{border-color:currentColor;}
 .rsn .ri{width:32px;height:32px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;}
 .rsn .ri svg{width:17px;height:17px;}
-.rsn .rt{font-size:11.5px;font-weight:800;color:var(--text);}
+.rsn .rt{font-size:13.5px;font-weight:800;color:var(--text);}
 .rsn.on .rt{color:currentColor;}
 .rsn.r-trip{background:var(--surface);} .rsn.r-trip.on{background:var(--rb-trip);}
 .rsn.r-vac{background:var(--surface);} .rsn.r-vac.on{background:var(--rb-vac);}
@@ -271,7 +275,7 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .rsn .ri{background:currentColor;}
 .rsn .ri svg{color:#fff;}
 .quick{display:flex;gap:5px;margin-bottom:10px;}
-.qc{font-size:11px;font-weight:700;padding:6px 10px;border-radius:999px;background:var(--surface);color:var(--muted);border:1px solid var(--line);white-space:nowrap;flex:1;}
+.qc{font-size:13px;font-weight:700;padding:9px 10px;border-radius:999px;background:var(--surface);color:var(--text-2);border:1.5px solid var(--line);white-space:nowrap;flex:1;}
 .qc.on{background:var(--brand);color:#fff;border-color:var(--brand);}
 .daterow{display:flex;align-items:center;gap:8px;}
 .dcell{flex:1;min-width:0;background:var(--surface);border:1.5px solid var(--brand);border-radius:14px;padding:8px 12px 9px;position:relative;}
@@ -285,7 +289,8 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .dp-i svg{width:16px;height:16px;}
 .dp-t{font-size:13px;font-weight:800;}
 .dp-d{font-size:11px;color:var(--text-2);margin-top:1px;}
-.dnote{font-size:11px;color:var(--muted);line-height:1.6;margin-top:9px;padding:0 3px;}
+.dnote{font-size:13px;color:var(--text-2);line-height:1.7;margin-top:11px;padding:0 3px;}
+.dnote b{color:var(--text);font-weight:800;}
 .lv{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);}
 .lv:last-child{border-bottom:none;}
 .lv-d{font-size:11.5px;color:var(--text-2);font-family:var(--mono);}
@@ -340,7 +345,51 @@ a.merow,a.merow:visited{color:var(--text);text-decoration:none;}
   color:#8A5A00;font-size:12px;font-weight:700;padding:10px 13px;border-radius:12px;margin-bottom:14px;line-height:1.5;
 }
 .banner.red{background:var(--danger-tint);border-color:#F7CDD2;color:#B3141F;}
-.empty{color:var(--muted);font-size:12px;padding:6px 2px;}
+.empty{color:var(--muted);font-size:13px;padding:7px 2px;}
+/* 앱 내 공지 (16:30 미입력 / 17:00 마감) */
+.notice{border-radius:18px;padding:16px 16px 14px;margin-top:14px;}
+.notice.warn{background:var(--danger-tint);border:1.5px solid var(--danger-line);}
+.notice.done{background:var(--tint);border:1.5px solid var(--tint-2);}
+.notice .nt{display:flex;align-items:center;gap:9px;font-size:16.5px;font-weight:800;letter-spacing:-.01em;}
+.notice.warn .nt{color:#93211A;}
+.notice.done .nt{color:var(--brand-dark);}
+.notice .nb{font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;
+  padding:3px 9px;border-radius:7px;flex-shrink:0;}
+.notice.warn .nb{background:var(--danger);}
+.notice.done .nb{background:var(--brand);}
+.nchips{margin-top:11px;}
+.ndesc{font-size:13px;color:var(--text-2);margin-top:10px;line-height:1.6;}
+.nsum{margin-top:11px;background:var(--surface);border-radius:12px;padding:4px 13px;}
+.nrow{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--line);}
+.nrow:last-child{border-bottom:none;}
+.nrow b{font-size:14px;font-weight:800;width:52px;flex-shrink:0;}
+.nrow em{font-style:normal;font-family:var(--mono);font-size:13px;color:var(--muted);}
+.nrow span{margin-left:auto;font-size:14px;font-weight:800;color:var(--brand-dark);}
+/* 마감 현황 명단 */
+.nitem{padding:9px 0;border-bottom:1px solid var(--line);}
+.nitem:last-child{border-bottom:none;}
+.nrow{display:flex;align-items:baseline;gap:8px;padding:0;border-bottom:none;}
+.nrow b{font-size:14.5px;font-weight:800;flex-shrink:0;width:auto;}
+.nrow em{font-style:normal;font-family:var(--mono);font-size:13px;color:var(--muted);}
+.nrow u{text-decoration:none;font-size:12.5px;color:var(--muted);}
+.nrow span{margin-left:auto;font-size:14px;font-weight:800;color:var(--brand-dark);}
+.nnames{font-size:13.5px;color:var(--text-2);line-height:1.6;margin-top:4px;}
+.nnames.none{color:var(--muted);}
+.ncopy{margin-top:13px;}
+/* 차량 번호판 */
+.plate{display:inline-flex;align-items:center;gap:5px;flex-shrink:0;
+  background:#1B2027;color:#F3F6F8;border-radius:6px;padding:3px 8px 3px 6px;
+  font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.22);}
+.plate i{width:4px;height:12px;border-radius:1.5px;background:#F5A524;flex-shrink:0;}
+/* 차량 이미지 하단 번호판 */
+.platebar{display:flex;justify-content:center;margin:0 0 9px;}
+.slim-left{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;}
+.slim-left .platebar{margin:0;}
+.carcard.slim .plate{font-size:11.5px;padding:2px 7px 2px 5px;letter-spacing:.04em;}
+.carcard.slim .plate i{height:9px;}
+.guide{font-size:13px;color:var(--text-2);line-height:1.75;}
+.guide b{color:var(--text);font-weight:800;}
 /* 마감 현황 복사 */
 .copybtn{display:flex;align-items:center;justify-content:center;gap:8px;margin:6px 0 8px;}
 .copybtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;
@@ -424,6 +473,48 @@ a.merow,a.merow:visited{color:var(--text);text-decoration:none;}
     <circle cx="224" cy="96" r="6.6" fill="none" stroke="var(--tire)" stroke-width="1.5" opacity=".3"/>
     <circle cx="224" cy="96" r="2.6" fill="var(--tire)" opacity=".55"/>
   </symbol>
+  <!-- 카니발 3/4 전면 (홈 헤더) -->
+<symbol id="car34" viewBox="14 32 184 90">
+  <ellipse cx="108" cy="116" rx="94" ry="6" fill="rgba(0,0,0,.16)"/>
+  <path d="M72 38 C110 38 142 41 154 44 C176 48 188 57 190 68 L190 92 C190 97 187 100 182 100 L72 103 Z" fill="var(--side)"/>
+  <path d="M46 41 L72 38 L72 103 L34 107 C24 107 20 103 20 96 L20 66 C20 61.5 22.5 59.5 27 58.8 L34 57 Z" fill="var(--body)"/>
+  <path d="M46 41 L72 38 C110 38 142 41 154 44 L153 48 C140 45 108 42 72 42 L48 45 Z" fill="var(--trim)"/>
+  <path d="M48 45 L68 42.5 L68 58 L37 61 Z" fill="var(--glass)"/>
+  <path d="M50.5 47 L60 46 L44 60 L39.5 60.4 Z" fill="var(--glass2)"/>
+  <path d="M76 45 L146 48 C158 50 166 55 169 61 L76 61 Z" fill="var(--glass)"/>
+  <path d="M103 46.4 h5 v14.6 h-5 z M129 47.6 h5 v13.4 h-5 z" fill="var(--side)"/>
+  <path d="M149 48.6 C159 50.4 166 55 169 61 L152 61 Z" fill="var(--pillar)"/>
+  <path d="M72 63 L182 67" stroke="var(--trim)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M103 65 L103 94 M131 66 L131 92" stroke="var(--sideDark)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M109 72 h13 v4 h-13 z M138 73 h13 v4 h-13 z" fill="var(--trim)"/>
+  <path d="M22 62.5 L36 59.6" stroke="var(--body2)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M21 68 L44 64.5 L44 74 L21 77 Z" fill="var(--lamp)"/>
+  <path d="M48 64 L68 61 L68 70 L48 73 Z" fill="var(--lamp)"/>
+  <path d="M23 79 L68 73 L68 88 L23 93 Z" fill="var(--pillar)"/>
+  <path d="M27 83 L65 77.6 M27 87.5 L65 82" stroke="var(--trim)" stroke-width="1.5" opacity=".45"/>
+  <path d="M20 95 L72 89 L72 103 L34 107 C24 107 20 103 20 96 Z" fill="var(--body2)"/>
+  <path d="M72 53 L86 55 C89 55.6 90 57.4 89.4 59.6 L89 61.4 C88.4 63.6 86.6 64.6 84 64 L72 61.6 Z" fill="var(--body)"/>
+  <path d="M80 95 a18 18 0 0 1 36 0 M152 93 a15 15 0 0 1 30 0" fill="var(--side)"/>
+  <ellipse cx="98" cy="95" rx="17" ry="16.5" fill="var(--tire)"/>
+  <ellipse cx="98" cy="95" rx="8.3" ry="8" fill="var(--rim)"/>
+  <ellipse cx="98" cy="95" rx="4.3" ry="4.1" fill="none" stroke="var(--tire)" stroke-width="1.4" opacity=".35"/>
+  <ellipse cx="167" cy="93" rx="14" ry="13.5" fill="var(--tire)"/>
+  <ellipse cx="167" cy="93" rx="6.9" ry="6.6" fill="var(--rim)"/>
+</symbol>
+
+  <!-- DO NOT USE 스탬프 (미이용 헤더) -->
+  <symbol id="stamp" viewBox="8 4 184 182">
+    <g fill="none" stroke="var(--ink)" stroke-width="5">
+      <circle cx="100" cy="95" r="87"/><circle cx="100" cy="95" r="78" stroke-width="3"/>
+      <circle cx="100" cy="95" r="45" stroke-width="3.5"/>
+    </g>
+    <g fill="var(--ink)"><path transform="translate(100.0 33.5) scale(.62) rotate(0)" d="M0 -11 L3.2 -3.6 L11 -3.4 L4.8 1.4 L7.2 8.9 L0 4.4 L-7.2 8.9 L-4.8 1.4 L-11 -3.4 L-3.2 -3.6 Z"/><path transform="translate(136.1 45.2) scale(.62) rotate(36)" d="M0 -11 L3.2 -3.6 L11 -3.4 L4.8 1.4 L7.2 8.9 L0 4.4 L-7.2 8.9 L-4.8 1.4 L-11 -3.4 L-3.2 -3.6 Z"/><path transform="translate(158.5 76.0) scale(.62) rotate(72)" d="M0 -11 L3.2 -3.6 L11 -3.4 L4.8 1.4 L7.2 8.9 L0 4.4 L-7.2 8.9 L-4.8 1.4 L-11 -3.4 L-3.2 -3.6 Z"/><path transform="translate(158.5 114.0) scale(.62) rotate(108)" d="M0 -11 L3.2 -3.6 L11 -3.4 L4.8 1.4 L7.2 8.9 L0 4.4 L-7.2 8.9 L-4.8 1.4 L-11 -3.4 L-3.2 -3.6 Z"/><path transform="translate(136.1 144.8) scale(.62) rotate(144)" d="M0 -11 L3.2 -3.6 L11 -3.4 L4.8 1.4 L7.2 8.9 L0 4.4 L-7.2 8.9 L-4.8 1.4 L-11 -3.4 L-3.2 -3.6 Z"/><path transform="translate(100.0 156.5) scale(.62) rotate(180)" d="M0 -11 L3.2 -3.6 L11 -3.4 L4.8 1.4 L7.2 8.9 L0 4.4 L-7.2 8.9 L-4.8 1.4 L-11 -3.4 L-3.2 -3.6 Z"/><path transform="translate(63.9 144.8) scale(.62) rotate(216)" d="M0 -11 L3.2 -3.6 L11 -3.4 L4.8 1.4 L7.2 8.9 L0 4.4 L-7.2 8.9 L-4.8 1.4 L-11 -3.4 L-3.2 -3.6 Z"/><path transform="translate(41.5 114.0) scale(.62) rotate(252)" d="M0 -11 L3.2 -3.6 L11 -3.4 L4.8 1.4 L7.2 8.9 L0 4.4 L-7.2 8.9 L-4.8 1.4 L-11 -3.4 L-3.2 -3.6 Z"/><path transform="translate(41.5 76.0) scale(.62) rotate(288)" d="M0 -11 L3.2 -3.6 L11 -3.4 L4.8 1.4 L7.2 8.9 L0 4.4 L-7.2 8.9 L-4.8 1.4 L-11 -3.4 L-3.2 -3.6 Z"/><path transform="translate(63.9 45.2) scale(.62) rotate(324)" d="M0 -11 L3.2 -3.6 L11 -3.4 L4.8 1.4 L7.2 8.9 L0 4.4 L-7.2 8.9 L-4.8 1.4 L-11 -3.4 L-3.2 -3.6 Z"/></g>
+    <g transform="rotate(-11 100 95)">
+      <rect x="7" y="74" width="186" height="42" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="5"/>
+      <text x="100" y="104.5" text-anchor="middle" fill="var(--ink)" textLength="158" lengthAdjust="spacingAndGlyphs"
+        font-family="Arial Black,Arial Bold,Arial,Helvetica,sans-serif" font-size="28" font-weight="900">DO NOT USE</text>
+    </g>
+  </symbol>
 </svg>
 
 <div class="splash" id="splash">
@@ -442,7 +533,6 @@ a.merow,a.merow:visited{color:var(--text);text-decoration:none;}
 /* ============================================================
    상수 · 기본값
    ============================================================ */
-var VAPID = 'BGGfo_K1emhe49-XMXQPV35jgKqQzU31aMoYvix-2Rfbcszq2RKRKC3WTuzTDrw6HmPOJ21H9uPDCPfCDJyB620';
 var CAPACITY = 5;
 var CUTOFF = '17:00';
 var REMIND = '16:30';
@@ -451,11 +541,12 @@ var DEFAULT_CARS = [
   {id:1, time:'17:40'}, {id:2, time:'18:30'},
   {id:3, time:'19:00'}, {id:4, time:'20:00'}
 ];
+var PLATE = { 'Tarun':'1048', 'Devender':'8999', 'Amit':'5462', 'Kailash':'5552' };
 var DEFAULT_DRIVERS = [
-  {name:'Kailash',  phone:'+917982248907'},
-  {name:'Devender', phone:'+919717428849'},
-  {name:'Tarun',    phone:'+919818069598'},
-  {name:'Amit',     phone:'+919958056187'}
+  {name:'Kailash',  phone:'+917982248907', plate:'5552'},
+  {name:'Devender', phone:'+919717428849', plate:'8999'},
+  {name:'Tarun',    phone:'+919818069598', plate:'1048'},
+  {name:'Amit',     phone:'+919958056187', plate:'5462'}
 ];
 var REASONS = [
   {key:'own',  label:'자차'},
@@ -471,8 +562,10 @@ var CAR_SKIN = {
   4:'--body:#21406A;--body2:#193253;--glass:#5D83AD;--glass2:#7FA1C6;--trim:#B4C7DC;--accent:#7FA5CE;--edge:#2F5583;--pillar:#142640;--tire:#22282D;--rim:#CBD6E2;--lamp:#B7CFE0;--tail:#FF3B47'
 };
 var SKIN_FULL = '--body:#EDF0EE;--body2:#DFE4E1;--glass:#D6DEDA;--glass2:#E6EBE8;--trim:#CDD5D0;--accent:#B4BCB7;--edge:#C6CFC9;--pillar:#8B958E;--tire:#96A09A;--rim:#D6DCD8;--lamp:#C2CBCE;--tail:#C9A9AC';
-var SKIN_MONO = '--body:rgba(255,255,255,.95);--body2:rgba(255,255,255,.72);--glass:rgba(255,255,255,.40);--glass2:rgba(255,255,255,.55);--trim:rgba(255,255,255,.85);--accent:rgba(255,255,255,.6);--edge:rgba(255,255,255,0);--pillar:rgba(255,255,255,.45);--tire:#0A7A37;--rim:rgba(255,255,255,.88);--lamp:rgba(255,255,255,.8);--tail:rgba(255,255,255,.75)';
-var SKIN_HERO = '--body:#FFFFFF;--body2:#DCEFE4;--glass:#B6E8CE;--glass2:#D8F4E7;--trim:#CFEADC;--accent:#00913F;--edge:rgba(255,255,255,0);--pillar:#0C6B34;--tire:#0A5F2E;--rim:#E8F6EE;--lamp:#8FD3B0;--tail:#E5202E';
+var SKIN_MONO = '--body:rgba(255,255,255,.95);--body2:rgba(255,255,255,.72);--glass:rgba(255,255,255,.40);--glass2:rgba(255,255,255,.55);--trim:rgba(255,255,255,.85);--accent:rgba(255,255,255,.6);--edge:rgba(255,255,255,0);--pillar:rgba(255,255,255,.30);--tire:#0B3A61;--rim:rgba(255,255,255,.88);--lamp:rgba(255,255,255,.8);--tail:rgba(255,255,255,.75)';
+var SKIN_FRONT = '--body:#FFFFFF;--body2:#B9D0E4;--side:#EDF3F8;--sideDark:#C2D6E6;--trim:#DCE9F4;--glass:#7FA8CC;--glass2:#A8C8E0;--pillar:#15507F;--tire:#0B2E4C;--rim:#E9F1F8;--lamp:#F2C14E';
+var SKIN_LEAVE = '--body:#FFFFFF;--body2:#9FBFDA;--trim:#DCE9F4;--edge:rgba(255,255,255,0);--pillar:#15507F';
+var SKIN_HERO = '--body:#FFFFFF;--body2:#D9E6F1;--glass:#A9CBE6;--glass2:#CFE4F3;--trim:#CBDDEC;--accent:#0E3A5E;--edge:rgba(255,255,255,0);--pillar:#0B2E4C;--tire:#0A2A45;--rim:#E9F1F8;--lamp:#8FB6D6;--tail:#E5202E';
 function carSkin(id, state){
   if(state === 'full') return SKIN_FULL;
   var s = CAR_SKIN[id] || CAR_SKIN[1];
@@ -481,9 +574,9 @@ function carSkin(id, state){
 }
 var RICON = {
   trip:'<rect x="2.8" y="7" width="18.4" height="12.6" rx="2.4"/><path d="M8.6 7V5.6A1.6 1.6 0 0 1 10.2 4h3.6a1.6 1.6 0 0 1 1.6 1.6V7"/>',
-  vac :'<path d="M3.5 12.4A8.5 8.5 0 0 1 20.5 12.4C18.4 11.2 16.3 11.2 14.2 12.4C12.1 11.2 10 11.2 7.9 12.4C6.4 11.5 5 11.5 3.5 12.4Z"/><path d="M12 11.6V19.7"/><path d="M12 19.7a2.1 2.1 0 0 0 4.1.5"/>',
+  vac :'<path d="M11.6 8.9C11.6 12.6 11 17 9.4 20.8"/><path d="M11.8 8.6C10.4 6.6 7.6 6 5.4 7.5"/><path d="M12.2 8.6C13.7 6.6 16.6 6 18.8 7.6"/><path d="M11.8 8.7C10.2 7.6 7.4 8.2 6 10.6"/><path d="M12.3 8.7C14 7.7 16.8 8.4 18.1 10.8"/><circle cx="12" cy="7.4" r="1.5"/><path d="M4.3 20.8h15.4"/>',
   own :'<path d="M5.2 11.2 6.7 7.8A2 2 0 0 1 8.5 6.6h7a2 2 0 0 1 1.8 1.2l1.5 3.4M4.6 11.2h14.8a1.9 1.9 0 0 1 1.9 1.9v3.3H2.7v-3.3a1.9 1.9 0 0 1 1.9-1.9Z"/><circle cx="7.4" cy="16.4" r="1.5"/><circle cx="16.6" cy="16.4" r="1.5"/>',
-  etc :'<circle cx="5.6" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="18.4" cy="12" r="1.4" fill="currentColor" stroke="none"/>'
+  etc :'<path d="M20.4 13.4a7.6 7.6 0 0 1-8.4 3.8L7 19.4l.7-3.7A7.5 7.5 0 1 1 20.4 13.4Z"/><circle cx="9.4" cy="11.4" r="1.05" fill="currentColor" stroke="none"/><circle cx="13" cy="11.4" r="1.05" fill="currentColor" stroke="none"/><circle cx="16.6" cy="11.4" r="1.05" fill="currentColor" stroke="none"/>'
 };
 var PHONE_SVG = '<svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2Z"/></svg>';
 var TAB_ICON = {
@@ -508,7 +601,6 @@ var modal = null;
 var calMonth = null;
 var draft = { reason:'own', start:null, end:null, quick:'today', editId:null };
 var ready = { cfg:false, board:false, leaves:false, users:false };
-var swReg = null, askedNotif = false;
 var app = document.getElementById('app');
 var histArmed = false;          // 안드로이드 뒤로가기용 히스토리 항목 보유 여부
 
@@ -553,7 +645,20 @@ function esc(s){
   });
 }
 function parseDate(s){ var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
-function fmtKo(s){ var d = parseDate(s); return (d.getMonth()+1)+'월 '+d.getDate()+'일('+'일월화수목금토'[d.getDay()]+')'; }
+function isoWeek(d){
+  var t = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  t.setDate(t.getDate() + 3 - ((t.getDay() + 6) % 7));      // 그 주의 목요일
+  var first = new Date(t.getFullYear(), 0, 4);
+  first.setDate(first.getDate() + 3 - ((first.getDay() + 6) % 7));
+  return 1 + Math.round((t - first) / (7 * 86400000));
+}
+/* 표준 날짜 표기 — [W37] 2026년 9월 8일 (화) */
+function fmtKo(s){
+  var d = parseDate(s);
+  return '[W' + pad(isoWeek(d)) + '] ' + d.getFullYear() + '년 '
+       + (d.getMonth()+1) + '월 ' + d.getDate() + '일 ('
+       + '일월화수목금토'[d.getDay()] + ')';
+}
 function fmtShort(s){ return s.slice(5).replace('-','.'); }
 function addDays(s, n){ var d = parseDate(s); d.setDate(d.getDate()+n); return dateStr(d); }
 function minsNow(){ var n = new Date(); return n.getHours()*60 + n.getMinutes(); }
@@ -576,6 +681,7 @@ function toast(msg){
 }
 function cars(){ return (config && config.cars) ? config.cars : DEFAULT_CARS; }
 function drivers(){ return (config && config.drivers) ? config.drivers : DEFAULT_DRIVERS; }
+function plateOf(d){ return (d && d.plate) || PLATE[d && d.name] || ''; }
 function weeksSinceAnchor(){
   var d = new Date(); var day = d.getDay();
   d.setDate(d.getDate() + (day===0 ? -6 : 1-day)); d.setHours(0,0,0,0);
@@ -645,6 +751,14 @@ function summaryText(){
     ? miss.map(function(u){ return u.name; }).join(', ')
     : '없음 (전원 입력 완료)') + '\n';
 
+  return out;
+}
+function missingText(){
+  var miss = missingUsers();
+  var out = '[퇴근셔틀] ' + fmtKo(today) + '\n';
+  out += '\u26A0\uFE0F ' + REMIND + ' 기준 미입력 ' + miss.length + '명\n\n';
+  out += (miss.length ? miss.map(function(u){ return u.name; }).join(', ') : '없음 (전원 입력 완료)') + '\n\n';
+  out += CUTOFF + '까지 탑승 또는 미이용 등록 부탁드립니다.\n';
   return out;
 }
 function copyText(t){
@@ -759,7 +873,6 @@ function subscribe(){
   }, err);
 
   watchBoard();
-  watchForeground();
   setInterval(tick, 20000);
 }
 
@@ -788,7 +901,7 @@ function tick(){
    ============================================================ */
 function signUp(name){
   return db.collection('users').doc(uid).set({
-    name: name, role: 'user', notifEnabled: true,
+    name: name, role: 'user',
     createdAt: Date.now(), lastSeenAt: Date.now()
   });
 }
@@ -806,6 +919,10 @@ function book(carId){
       data.entries = e; data.date = today;
       tx.set(ref, data);
     });
+  }).then(function(){
+    return clearMyLeaveToday().then(function(cleared){
+      if(cleared) toast('오늘 미이용 등록은 해제되었습니다');
+    }).catch(function(){});
   });
 }
 function cancelBook(){
@@ -813,6 +930,29 @@ function cancelBook(){
   o['entries.' + uid] = firebase.firestore.FieldValue.delete();
   return db.collection('board').doc(today).update(o);
 }
+/* 탑승을 등록하면 오늘자 미이용은 해제한다 (기간 등록이면 오늘 하루만 빼낸다) */
+function clearMyLeaveToday(){
+  var lv = myLeaveToday();
+  if(!lv) return Promise.resolve(false);
+  var col = db.collection('leaves');
+  if(lv.start === today && lv.end === today){
+    return col.doc(lv.id).delete().then(function(){ return true; });
+  }
+  if(lv.start === today){
+    return col.doc(lv.id).update({ start: addDays(today, 1) }).then(function(){ return true; });
+  }
+  if(lv.end === today){
+    return col.doc(lv.id).update({ end: addDays(today, -1) }).then(function(){ return true; });
+  }
+  var tail = lv.end;
+  return col.doc(lv.id).update({ end: addDays(today, -1) })
+    .then(function(){
+      return col.add({ uid: uid, name: me.name, reason: lv.reason,
+                       start: addDays(today, 1), end: tail, createdAt: Date.now() });
+    })
+    .then(function(){ return true; });
+}
+
 function addLeave(reason, start, end){
   return db.collection('leaves').add({
     uid: uid, name: me.name, reason: reason, start: start, end: end, createdAt: Date.now()
@@ -821,72 +961,6 @@ function addLeave(reason, start, end){
 function delLeave(id){ return db.collection('leaves').doc(id).delete(); }
 function saveConfig(patch){ return db.collection('config').doc('app').set(patch, {merge:true}); }
 function isAdmin(){ return me && me.role === 'admin'; }
-
-/* ---------- 알림 ---------- */
-function notifSupported(){
-  try{
-    return ('Notification' in window) && ('serviceWorker' in navigator)
-      && firebase.messaging && firebase.messaging.isSupported && firebase.messaging.isSupported();
-  }catch(e){ return false; }
-}
-function notifOn(){ return me && me.notifEnabled !== false && !!me.fcmToken; }
-
-function enableNotifications(){
-  if(!notifSupported()) return Promise.reject(new Error('UNSUPPORTED'));
-  return navigator.serviceWorker.register('service-worker.js')
-    .then(function(reg){
-      swReg = reg;
-      return navigator.serviceWorker.ready;
-    })
-    .then(function(){
-      if(Notification.permission === 'denied') throw new Error('BLOCKED');
-      return Notification.requestPermission();
-    })
-    .then(function(perm){
-      if(perm === 'denied') throw new Error('BLOCKED');
-      if(perm !== 'granted') throw new Error('DENIED');
-      return firebase.messaging().getToken({ vapidKey: VAPID, serviceWorkerRegistration: swReg });
-    })
-    .then(function(token){
-      if(!token) throw new Error('NO_TOKEN');
-      return db.collection('users').doc(uid).update({ fcmToken: token, notifEnabled: true });
-    });
-}
-function disableNotifications(){
-  return db.collection('users').doc(uid).update({ notifEnabled: false });
-}
-function isBlocked(e){
-  return e.message === 'BLOCKED'
-    || (e.code && String(e.code).indexOf('permission-blocked') >= 0)
-    || (e.message && e.message.indexOf('permission-blocked') >= 0);
-}
-function notifErrText(e){
-  if(e.message === 'DENIED')      return '알림을 허용해 주셔야 받으실 수 있습니다';
-  if(e.message === 'UNSUPPORTED') return '이 기기에서는 알림을 지원하지 않습니다';
-  if(e.message === 'NO_TOKEN')    return '알림 등록에 실패했습니다. 잠시 후 다시 시도해 주세요';
-  return '알림 설정 실패: ' + e.message;
-}
-function showBlockedHelp(){
-  openModal({ type:'confirm', title:'알림이 차단되어 있습니다',
-    desc:'이전에 &lsquo;차단&rsquo;을 누르셔서 앱이 다시 여쭤볼 수 없습니다.<br>'
-       + '휴대폰 설정에서 직접 켜주셔야 합니다.<br><br>'
-       + '<b>설정 → 애플리케이션 → 퇴근셔틀 → 알림</b><br>'
-       + '→ 스위치를 <b>켜기</b><br><br>'
-       + '켜신 뒤 앱을 완전히 종료했다가 다시 열고,<br>이 스위치를 한 번 더 눌러주세요.',
-    ok:'확인', cancel:'닫기',
-    run:function(){
-      toast('설정 → 애플리케이션 → 퇴근셔틀 → 알림');
-    } });
-}
-function watchForeground(){
-  if(!notifSupported()) return;
-  try{
-    firebase.messaging().onMessage(function(payload){
-      var d = (payload && payload.data) || {};
-      if(d.title) toast(d.title.replace(/^\S+\s/, ''));
-    });
-  }catch(e){}
-}
 
 /* ============================================================
    렌더
@@ -907,28 +981,6 @@ function render(){
   app.innerHTML = html + (view ? '' : tabbar()) + (modal ? renderModal() : '');
   bind();
   armHistory();
-  maybeAskNotif();
-}
-
-function maybeAskNotif(){
-  if(askedNotif || modal || view) return;
-  if(!me || !me.name) return;
-  if(!notifSupported()) return;
-  if(me.fcmToken || me.notifEnabled === false) return;
-  if(Notification.permission === 'denied') return;
-  askedNotif = true;
-  setTimeout(function(){
-    openModal({ type:'confirm', title:'알림을 받으시겠습니까?',
-      desc:'하루 두 번만 보냅니다.<br><br>'
-         + '<b>' + REMIND + '</b> 아직 입력하지 않으셨을 때만 안내<br>'
-         + '<b>' + CUTOFF + '</b> 오늘 배차 마감 현황',
-      ok:'알림 받기', cancel:'나중에',
-      run:function(){
-        enableNotifications()
-          .then(function(){ toast('알림이 켜졌습니다'); })
-          .catch(function(e){ if(isBlocked(e)) showBlockedHelp(); else toast(notifErrText(e)); });
-      } });
-  }, 800);
 }
 
 function hideSplash(){
@@ -978,20 +1030,56 @@ function bindOnboard(){
 /* ---------- 홈 ---------- */
 function header(){
   var d = new Date();
-  var dateTxt = d.getFullYear() + '년 ' + (d.getMonth()+1) + '월 ' + d.getDate() + '일 ' + '일월화수목금토'[d.getDay()] + '요일';
+  var dateTxt = fmtKo(today);
   var left = toMins(CUTOFF) - minsNow();
   var cd;
   if(isHoliday(today))      cd = '<div class="countdown">휴무일 · 셔틀 미운행</div>';
   else if(isOffDay(today))  cd = '<div class="countdown">일요일 · 셔틀 미운행</div>';
   else if(left > 0)         cd = '<div class="countdown">입력 마감까지 <span class="mono">' + pad(Math.floor(left/60)) + ':' + pad(left%60) + '</span></div>';
   else                      cd = '<div class="countdown">등록 마감</div>';
-  var sym = '<div class="gh-sym"><svg viewBox="0 0 288 132" class="car" style="' + SKIN_MONO + '">'
-    + '<use href="#carnival"/></svg></div>';
-  return '<div class="ghead"><div class="ghead-in has-sym">'
+  var sym = '';
+  return '<div class="ghead"><div class="ghead-in">'
     + sym
     + '<div class="date">' + dateTxt + '</div>'
     + '<div class="hello">' + esc(me.name) + '님, 안녕하세요</div>'
     + cd + '</div></div>';
+}
+
+/* 16:30 이후 = 미입력 명단, 17:00 이후 = 마감 현황 */
+function noticeCard(){
+  if(isHoliday(today) || isOffDay(today)) return '';
+  var now = minsNow();
+  if(now < toMins(REMIND)) return '';
+
+  if(now < toMins(CUTOFF)){
+    var miss = missingUsers();
+    return '<div class="notice warn">'
+      + '<div class="nt"><span class="nb">' + REMIND + '</span>미입력 ' + miss.length + '명</div>'
+      + '<div class="nchips">' + (miss.length
+          ? miss.map(function(u){ return '<span class="chip miss">' + esc(u.name) + '</span>'; }).join('')
+          : '<span class="chip">전원 입력 완료</span>') + '</div>'
+      + '<div class="ndesc">' + CUTOFF + '까지 등록하지 않으면 배차되지 않습니다.</div>'
+      + '<button class="btn btn-pri btn-block ncopy" id="copyMiss">미입력 명단 복사</button>'
+      + '</div>';
+  }
+
+  var tot = 0;
+  cars().forEach(function(c){ tot += ridersOf(c.id).length; });
+  return '<div class="notice done">'
+    + '<div class="nt"><span class="nb">' + CUTOFF + '</span>오늘 배차 마감</div>'
+    + '<div class="nsum">' + cars().map(function(c,i){
+        var rr = ridersOf(c.id);
+        return '<div class="nitem">'
+             + '<div class="nrow"><b>' + c.id + '호차</b><em>' + esc(c.time) + '</em>'
+             +   '<u>기사 ' + esc(driverFor(i).name) + '</u>'
+             +   '<span>' + rr.length + '명</span></div>'
+             + '<div class="nnames' + (rr.length ? '' : ' none') + '">'
+             +   (rr.length ? rr.map(function(r){ return esc(r.name); }).join(', ') : '탑승자 없음')
+             + '</div></div>';
+      }).join('') + '</div>'
+    + '<div class="ndesc">총 ' + tot + '명 탑승 · 미이용 ' + todaysLeaves().length + '명 · 미입력 ' + missingUsers().length + '명</div>'
+    + '<button class="btn btn-pri btn-block ncopy" id="copySum">마감 현황 복사</button>'
+    + '</div>';
 }
 
 function viewHome(){
@@ -1032,6 +1120,7 @@ function viewHome(){
   return header() + '<div class="scroll"><div class="sheet">'
     + (isHoliday(today) ? '<div class="banner">오늘은 등록된 휴무일입니다. 셔틀이 운행하지 않습니다.</div>' : '')
     + st
+    + noticeCard()
     + '<div class="seclbl">차량 선택</div>' + list
     + (lv ? '' : '<button class="btn btn-out btn-block" id="goLeave" style="margin-top:14px">오늘은 이용하지 않습니다</button>')
     + '</div></div>';
@@ -1060,6 +1149,8 @@ function carCard(c, idx, hero, mine){
   var call = dr.phone
     ? '<a class="callbtn" href="tel:' + esc(dr.phone) + '" aria-label="기사에게 전화">' + PHONE_SVG + '</a>'
     : '';
+  var pl = plateOf(dr);
+  var plate = pl ? '<div class="platebar"><span class="plate"><i></i>' + esc(pl) + '</span></div>' : '';
 
   var ridersHtml = rid.map(function(r){
     return '<span class="' + (r.uid === uid ? 'me' : '') + '">' + esc(r.name) + '</span>';
@@ -1088,6 +1179,7 @@ function carCard(c, idx, hero, mine){
       +   (picked ? '<span class="picktag">탑승 확정</span>' : '')
       +   '<div class="cc-time">' + esc(c.time) + '</div></div>'
       + '<div class="cc-art ' + state + '"><svg class="car" style="' + skin + '" viewBox="0 0 288 132"><use href="#carnival"/></svg></div>'
+      + plate
       + '<div class="cc-mid"><div class="cc-driver">기사 <b>' + esc(dr.name) + '</b></div>' + call
       +   '<div class="cc-seat">' + seatHtml(n, state) + '<span class="cc-cnt' + cntCls + '">' + cnt + '</span></div></div>'
       + memoRow
@@ -1096,7 +1188,7 @@ function carCard(c, idx, hero, mine){
   }
   return '<div class="carcard slim' + (state==='full' ? ' closed' : '') + '">'
     + '<div class="slim-top">'
-    +   '<div class="slim-art ' + state + '"><svg class="car" style="' + skin + '" viewBox="0 0 288 132"><use href="#carnival"/></svg></div>'
+    +   '<div class="slim-left"><div class="slim-art ' + state + '"><svg class="car" style="' + skin + '" viewBox="0 0 288 132"><use href="#carnival"/></svg></div>' + plate + '</div>'
     +   '<div class="slim-main">'
     +     '<div class="slim-r1"><div class="cc-badge">' + c.id + '</div><div class="cc-name">' + c.id + '호차</div><div class="cc-time">' + esc(c.time) + '</div></div>'
     +     '<div class="slim-r2"><div class="cc-driver">기사 <b>' + esc(dr.name) + '</b></div>' + call
@@ -1114,12 +1206,9 @@ function viewLeave(){
   var mineLv = leaves.filter(function(l){ return l.uid === uid && l.end >= today && l.id !== draft.editId; })
                      .sort(function(a,b){ return a.start.localeCompare(b.start); });
 
-  var lvSym = '<div class="gh-sym small"><svg viewBox="0 0 288 132" class="car" style="' + SKIN_MONO + '">'
-    + '<use href="#carnival"/>'
-    + '<line x1="26" y1="116" x2="262" y2="16" stroke="rgba(255,255,255,.55)" stroke-width="20" stroke-linecap="round"/>'
-    + '<line x1="26" y1="116" x2="262" y2="16" stroke="#00B14F" stroke-width="9" stroke-linecap="round"/>'
-    + '</svg></div>';
-  return '<div class="ghead"><div class="ghead-in has-sym small-sym">'
+  var lvSym = '<div class="gh-sym cal"><svg viewBox="0 0 184 182" class="car" style="--ink:#E23B34;--paper:#FFFFFF">'
+    + '<use href="#stamp" width="184" height="182"/></svg></div>';
+  return '<div class="ghead"><div class="ghead-in has-sym cal-sym">'
     + lvSym
     + '<button class="backbtn" id="back">‹ 뒤로</button>'
     + '<div class="hello">' + (draft.editId ? '미이용 변경' : '미이용 등록') + '</div></div></div>'
@@ -1143,7 +1232,7 @@ function viewLeave(){
     +   '<svg class="icn" viewBox="0 0 24 24">' + RICON[draft.reason] + '</svg></div>'
     +   '<div><div class="dp-t">' + fmtKo(draft.start) + (draft.start !== draft.end ? ' ~ ' + fmtKo(draft.end) : '') + '</div>'
     +   '<div class="dp-d">' + reasonLabel(draft.reason) + ' · ' + days + '일간 미이용으로 등록됩니다</div></div></div>'
-    + '<div class="dnote">기간 중에는 16:30 미입력 알림을 보내지 않습니다. 기간이 끝나면 자동으로 해제됩니다.</div>'
+    + '<div class="dnote">등록한 기간에는 <b>미입력 명단에 표시되지 않습니다.</b> 기간이 끝나면 자동으로 해제됩니다.</div>'
     + (mineLv.length ? '<div class="seclbl">내가 등록한 미이용</div><div class="card" style="padding:6px 14px">'
         + mineLv.map(function(l){
             return '<div class="lv"><span class="rsnchip r-' + l.reason + '"><svg class="icn" viewBox="0 0 24 24">' + RICON[l.reason] + '</svg>' + reasonLabel(l.reason) + '</span>'
@@ -1204,7 +1293,7 @@ function viewStatus(){
     + '<div class="seclbl">미입력 · ' + miss.length + '명</div><div class="card">'
     +   '<div class="sn">' + (miss.length ? miss.map(function(u){
           return '<span class="chip miss">' + esc(u.name) + '</span>'; }).join('') : '<span class="empty">전원 입력 완료</span>') + '</div>'
-    +   (miss.length ? '<div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.55">' + REMIND + '에 미입력자에게 알림이 발송됩니다.</div>' : '')
+    +   (miss.length ? '<div class="guide" style="margin-top:12px">' + REMIND + '이 지나면 홈 화면에 미입력 명단이 표시됩니다.</div>' : '')
     + '</div>'
     + '</div></div>';
 }
@@ -1218,25 +1307,19 @@ function viewMe(){
     + (since ? since.getFullYear() + '년 ' + (since.getMonth()+1) + '월 ' + since.getDate() + '일부터 이용 중' : '') + '</div>'
     + '</div></div>'
     + '<div class="scroll"><div class="sheet">'
-    + '<div class="seclbl">알림</div><div class="group">'
-    +   '<button class="merow" id="tgNotif"><span class="mi">🔔</span>퇴근 셔틀 알림 받기'
-    +     '<span class="toggle' + (notifOn() ? '' : ' off') + '"></span></button>'
-    + '</div>'
-    + '<div style="font-size:11px;color:var(--muted);padding:8px 6px 0;line-height:1.6">'
-    +   REMIND + ' 미입력 안내와 ' + CUTOFF + ' 마감 현황을 보냅니다.'
-    +   (!notifSupported()
-        ? '<br><b style="color:var(--warn)">이 기기에서는 알림을 지원하지 않습니다.</b>'
-        : (notifOn() ? ''
-          : (('Notification' in window && Notification.permission === 'denied')
-            ? '<br><b style="color:var(--danger)">알림이 차단되어 있습니다. 스위치를 눌러 해제 방법을 확인하세요.</b>'
-            : '<br><b style="color:var(--warn)">지금은 꺼져 있습니다. 스위치를 켜주세요.</b>')))
+    + '<div class="seclbl">안내</div><div class="card">'
+    +   '<div class="guide"><b>' + REMIND + '</b> 홈 화면에 <b>미입력 명단</b>이 표시됩니다.<br>'
+    +   '<b>' + CUTOFF + '</b> 홈 화면에 <b>오늘 마감 현황</b>이 표시됩니다.<br>'
+    +   '각 화면의 <b>복사</b> 버튼을 누르면 메신저에 붙여넣으실 수 있습니다.</div>'
     + '</div>'
     + '<div class="seclbl">계정</div><div class="group">'
     +   '<button class="merow" id="chName"><span class="mi">✎</span>이름 변경<span class="mv">' + esc(me.name) + ' ›</span></button>'
     + '</div>'
     + '<div class="seclbl">기사 연락처</div><div class="group">'
     + drivers().map(function(d, i){
+        var pp = plateOf(d);
         return '<a class="merow" href="tel:' + esc(d.phone) + '"><span class="mi">📞</span>' + esc(d.name)
+             + (pp ? '<span class="plate" style="margin-left:9px"><i></i>' + esc(pp) + '</span>' : '')
              + '<span class="mv">' + esc(fmtPhone(d.phone)) + ' ›</span></a>';
       }).join('') + '</div>'
     + '<div style="font-size:11px;color:var(--muted);padding:8px 6px 0;line-height:1.6">'
@@ -1245,7 +1328,7 @@ function viewMe(){
     +   '<button class="merow" id="goAdmin"><span class="mi">🔒</span>관리자 모드'
     +     '<span class="mv">' + (isAdmin() ? '사용 중 ›' : 'PIN 입력 ›') + '</span></button>'
     + '</div>'
-    + '<div class="verline">v2.0.0 · shuttle-board2</div>'
+    + '<div class="verline">v2.1.0 · shuttle-board2</div>'
     + '</div></div>';
 }
 function fmtPhone(p){
@@ -1284,7 +1367,9 @@ function viewAdmin(){
     + '<div class="seclbl">기사 배차 (4주 로테이션)</div><div class="card">'
     + cars().map(function(c,i){
         return '<div class="strow"><div class="sl">' + c.id + '호차<em>' + esc(c.time) + '</em></div>'
-             + '<div class="sn">' + esc(driverFor(i).name) + ' <span style="color:var(--muted)">' + esc(fmtPhone(driverFor(i).phone)) + '</span></div></div>';
+             + '<div class="sn">' + esc(driverFor(i).name)
+             + (plateOf(driverFor(i)) ? ' <span class="plate"><i></i>' + esc(plateOf(driverFor(i))) + '</span>' : '')
+             + ' <span style="color:var(--muted)">' + esc(fmtPhone(driverFor(i).phone)) + '</span></div></div>';
       }).join('') + '</div>'
     + '</div></div>';
 }
@@ -1344,7 +1429,8 @@ function renderModal(){
          + drivers().map(function(d,i){
              return '<div class="field"><label>' + (i+1) + '번</label>'
                   + '<input class="drName" data-i="' + i + '" value="' + esc(d.name) + '" placeholder="이름" style="margin-bottom:6px">'
-                  + '<input class="drPhone" data-i="' + i + '" value="' + esc(d.phone) + '" placeholder="+919999999999" inputmode="tel"></div>';
+                  + '<input class="drPhone" data-i="' + i + '" value="' + esc(d.phone) + '" placeholder="+919999999999" inputmode="tel" style="margin-bottom:6px">'
+                  + '<input class="drPlate" data-i="' + i + '" value="' + esc(plateOf(d)) + '" placeholder="차량번호 뒤 4자리" inputmode="numeric"></div>';
            }).join('')
          + '<div class="modal-row"><button class="btn btn-out" data-mc="0">취소</button>'
          + '<button class="btn btn-pri" data-mc="1">저장</button></div>';
@@ -1450,10 +1536,14 @@ function bind(){
   if(sl) sl.onclick = function(){
     sl.disabled = true;
     var edit = draft.editId;
-    var p = myEntry() ? cancelBook().catch(function(){}) : Promise.resolve();
+    var hadSeat = !!myEntry();
+    var p = hadSeat ? cancelBook().catch(function(){}) : Promise.resolve();
     if(edit) p = p.then(function(){ return delLeave(edit); });
     p.then(function(){ return addLeave(draft.reason, draft.start, draft.end); })
-     .then(function(){ draft.editId = null; toast(edit ? '변경되었습니다' : '미이용으로 등록되었습니다'); closeView(); })
+     .then(function(){ draft.editId = null;
+        toast(hadSeat ? '탑승 등록이 취소되고 미이용으로 등록되었습니다'
+                      : (edit ? '변경되었습니다' : '미이용으로 등록되었습니다'));
+        closeView(); })
      .catch(function(e){ sl.disabled = false; toast('실패: ' + e.message); });
   };
   var dl = document.getElementById('delEditLeave');
@@ -1464,18 +1554,6 @@ function bind(){
   };
 
   // 내정보
-  var tg = document.getElementById('tgNotif');
-  if(tg) tg.onclick = function(){
-    if(notifOn()){
-      disableNotifications().then(function(){ toast('알림을 껐습니다'); });
-      return;
-    }
-    tg.disabled = true;
-    enableNotifications()
-      .then(function(){ toast('알림이 켜졌습니다'); })
-      .catch(function(e){ if(isBlocked(e)) showBlockedHelp(); else toast(notifErrText(e)); })
-      .then(function(){ tg.disabled = false; });
-  };
   var cn = document.getElementById('chName');
   if(cn) cn.onclick = function(){
     openModal({ type:'text', title:'이름 변경', value:me.name, ph:'이름',
@@ -1520,6 +1598,10 @@ function bind(){
   });
   var cs2 = document.getElementById('copySum');
   if(cs2) cs2.onclick = function(){ openSummary(); };
+  var cm = document.getElementById('copyMiss');
+  if(cm) cm.onclick = function(){
+    openModal({ type:'share', title: REMIND + ' 미입력 명단', text: missingText() });
+  };
 
   var tt = document.getElementById('tgTemp');
   if(tt) tt.onclick = function(){
@@ -1581,6 +1663,7 @@ function bindModal(){
         var list = drivers().slice();
         each('.drName', function(inp){ list[+inp.dataset.i].name = inp.value.trim(); });
         each('.drPhone', function(inp){ list[+inp.dataset.i].phone = inp.value.trim(); });
+        each('.drPlate', function(inp){ list[+inp.dataset.i].plate = inp.value.trim(); });
         closeModal();
         saveConfig({ drivers: list }).then(function(){ toast('저장되었습니다'); });
         return;

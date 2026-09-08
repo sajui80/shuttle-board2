@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#00B14F">
+<meta name="theme-color" content="#2F3944">
 <title>퇴근셔틀 앱 V2 설치</title>
 <meta name="description" content="퇴근셔틀 앱 V2 · 안드로이드 APK 다운로드 및 설치 안내">
 <meta property="og:title" content="퇴근셔틀 앱 V2">
@@ -11,10 +11,11 @@
 <link rel="icon" href="icon-192.png">
 <style>
 :root{
-  --brand:#00B14F; --brand-dark:#00913F; --brand-deep:#046B33;
-  --tint:#E8F8EF; --tint-2:#CFEFDD;
-  --bg:#F4F6F8; --surface:#FFFFFF;
-  --text:#16211B; --text-2:#3F4E46; --muted:#7A8780; --line:#E4E9E6;
+  --brand:#B25E08; --brand-dark:#8F4A06; --brand-deep:#6E3904;
+  --ink:#2F3944; --ink-dark:#1E252C;
+  --tint:#FBF0E2; --tint-2:#F0D6AE;
+  --bg:#F1F2F4; --surface:#FFFFFF;
+  --text:#14171A; --text-2:#3B434B; --muted:#606A74; --line:#DEE2E6;
   --warn:#B45309; --warn-bg:#FEF6E7; --warn-line:#F6DFB4;
   --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --mono:ui-monospace,"Roboto Mono",SFMono-Regular,Menlo,Consolas,monospace;
@@ -27,9 +28,9 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);
 /* 헤더 */
 .hero{text-align:center;}
 .appicon{width:92px;height:92px;border-radius:23px;margin:0 auto 18px;
-  background:linear-gradient(160deg,#12C25C 0%,var(--brand) 45%,var(--brand-dark) 100%);
+  background:linear-gradient(160deg,#3E4A57 0%,var(--ink) 45%,var(--ink-dark) 100%);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 10px 26px rgba(0,145,63,.32);}
+  box-shadow:0 10px 26px rgba(30,37,44,.34);}
 .appicon svg{width:56px;height:56px;}
 h1{font-size:25px;font-weight:900;letter-spacing:-.04em;margin:0 0 6px;}
 .sub{color:var(--muted);font-size:13.5px;margin:0 0 26px;letter-spacing:-.01em;}
@@ -38,8 +39,8 @@ h1{font-size:25px;font-weight:900;letter-spacing:-.04em;margin:0 0 6px;}
 .dl{display:flex;align-items:center;justify-content:center;gap:9px;
   background:linear-gradient(180deg,var(--brand) 0%,var(--brand-dark) 100%);
   color:#fff;text-decoration:none;font-size:17px;font-weight:800;letter-spacing:-.02em;
-  padding:19px 20px;border-radius:16px;box-shadow:0 8px 20px rgba(0,145,63,.28);}
-.dl:active{transform:translateY(1px);box-shadow:0 4px 12px rgba(0,145,63,.28);}
+  padding:19px 20px;border-radius:16px;box-shadow:0 8px 20px rgba(143,74,6,.30);}
+.dl:active{transform:translateY(1px);box-shadow:0 4px 12px rgba(143,74,6,.30);}
 .dl svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.2;
   stroke-linecap:round;stroke-linejoin:round;}
 .ver{text-align:center;color:var(--muted);font-size:12.5px;margin:12px 0 0;}
@@ -81,8 +82,8 @@ code{font-family:var(--mono);font-size:12.5px;background:var(--tint);
 
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#101512; --surface:#181F1B; --text:#EAF1EC; --text-2:#C2CFC7;
-    --muted:#8B9A92; --line:#28312C; --tint:#123322; --tint-2:#1C4A31;
+    --bg:#121416; --surface:#1B1F23; --text:#EDEFF1; --text-2:#C6CCD2;
+    --muted:#8E959C; --line:#2C3238; --tint:#33240F; --tint-2:#54391A;
     --warn:#F0B860; --warn-bg:#2C2214; --warn-line:#4A3A1E;
   }
 }
@@ -95,13 +96,13 @@ code{font-family:var(--mono);font-size:12.5px;background:var(--tint);
     <div class="appicon">
       <svg viewBox="0 0 64 64" aria-hidden="true">
         <rect x="8" y="16" width="48" height="30" rx="7" fill="#fff"/>
-        <rect x="13.5" y="21.5" width="16" height="11" rx="2.5" fill="#00B14F"/>
-        <rect x="34.5" y="21.5" width="16" height="11" rx="2.5" fill="#00B14F"/>
-        <rect x="13.5" y="37" width="37" height="4" rx="2" fill="#00B14F" opacity=".45"/>
+        <rect x="13.5" y="21.5" width="16" height="11" rx="2.5" fill="#F2A13A"/>
+        <rect x="34.5" y="21.5" width="16" height="11" rx="2.5" fill="#F2A13A"/>
+        <rect x="13.5" y="37" width="37" height="4" rx="2" fill="#F2A13A" opacity=".45"/>
         <circle cx="19" cy="49" r="5.5" fill="#fff"/>
         <circle cx="45" cy="49" r="5.5" fill="#fff"/>
-        <circle cx="19" cy="49" r="2.2" fill="#00913F"/>
-        <circle cx="45" cy="49" r="2.2" fill="#00913F"/>
+        <circle cx="19" cy="49" r="2.2" fill="#B25E08"/>
+        <circle cx="45" cy="49" r="2.2" fill="#B25E08"/>
       </svg>
     </div>
     <h1>퇴근셔틀 앱 V2</h1>
@@ -111,7 +112,7 @@ code{font-family:var(--mono);font-size:12.5px;background:var(--tint);
       <svg viewBox="0 0 24 24"><path d="M12 3.5v11m0 0 4.2-4.2M12 14.5 7.8 10.3"/><path d="M4.5 17v2.2A1.3 1.3 0 0 0 5.8 20.5h12.4a1.3 1.3 0 0 0 1.3-1.3V17"/></svg>
       최신 버전 APK 다운로드
     </a>
-    <p class="ver">퇴근셔틀 V2 <b>v2.0.0</b> · 2026. 9. 5.</p>
+    <p class="ver">퇴근셔틀 V2 <b>v2.1.0</b> · 2026. 9. 8.</p>
   </div>
 
   <div class="card">
@@ -121,7 +122,7 @@ code{font-family:var(--mono);font-size:12.5px;background:var(--tint);
       <li>다운로드 완료 알림 또는 <b>파일함(내 파일)</b>에서 다운로드된 apk 파일을 엽니다.</li>
       <li>“출처를 알 수 없는 앱” 관련 팝업이 뜨면 <b>허용</b>을 눌러줍니다. (최초 1회만)</li>
       <li><b>설치</b>를 눌러 설치를 완료합니다.</li>
-      <li>홈 화면에 생성된 <b>퇴근셔틀2</b> 아이콘을 실행합니다.</li>
+      <li>홈 화면에 생성된 <b>퇴근셔틀2</b> 아이콘을 실행하고, <b>이름</b>을 한 번 입력합니다.</li>
     </ol>
     <div class="note"><span class="ic">⚠️</span>
       <span>새 버전이 나올 때도 <b>동일한 방법</b>으로 다시 다운로드 후 설치하면 기존 앱 위에 업데이트됩니다. 이름과 등록 내용은 그대로 유지됩니다.</span>
@@ -129,13 +130,16 @@ code{font-family:var(--mono);font-size:12.5px;background:var(--tint);
     <div class="note"><span class="ic">ℹ️</span>
       <span>기존 <b>퇴근셔틀</b> 앱과는 <b>별개로</b> 설치됩니다. 안내가 있을 때까지 기존 앱은 지우지 마시고 그대로 두세요.</span>
     </div>
+    <div class="note"><span class="ic">🔕</span>
+      <span>이 앱은 <b>푸시 알림을 보내지 않습니다.</b> 알림 권한을 따로 켜실 필요가 없습니다. 16:30 미입력 명단과 17:00 마감 현황은 <b>앱 홈 화면</b>에서 확인하시면 됩니다.</span>
+    </div>
   </div>
 
   <a class="next" href="notice.html">
-    <span class="bell">🔔</span>
+    <span class="bell">📖</span>
     <span>
-      <span class="t">설치 후 알림 설정하기</span>
-      <span class="d">한 번만 하시면 됩니다 · 약 2분</span>
+      <span class="t">앱 사용 안내 보기</span>
+      <span class="d">탑승 등록 · 미이용 등록 · 마감 현황 복사</span>
     </span>
     <span class="go">›</span>
   </a>

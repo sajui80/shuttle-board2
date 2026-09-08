@@ -3,472 +3,311 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#00B14F">
-<meta name="description" content="퇴근 셔틀 앱 알림 설정 안내 - 단계별 그림 설명">
-<meta property="og:title" content="퇴근셔틀 알림 설정 안내">
-<meta property="og:description" content="앱 설치 후 한 번만 하시면 됩니다. 약 2분.">
-<meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2300B14F'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'%3E%EC%85%94%3C/text%3E%3C/svg%3E">
-<style>*{box-sizing:border-box}body{margin:0}</style>
-<title>퇴근셔틀 알림 설정 안내</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<meta name="theme-color" content="#2F3944">
+<title>퇴근셔틀 앱 사용 안내</title>
+<meta name="description" content="퇴근셔틀 앱 V2 사용법 — 이름 등록, 탑승 등록, 미이용 등록, 마감 현황 복사">
+<link rel="icon" href="icon-192.png">
 <style>
 :root{
-  --bg:#F4F7F5; --surface:#FFFFFF; --surface-2:#EBF1ED;
-  --ink:#13221B; --ink-2:#3C4D44; --muted:#6A7B70; --rule:#DCE5DF;
-  --brand:#00B14F; --brand-dark:#00913F; --tint:#E8F8EF; --tint-2:#CFEFDD;
-  --mark:#EE4B1F; --mark-tint:#FFEDE7;
-  --warn:#B45309; --warn-tint:#FEF3E2;
-  --red:#C1121F; --red-tint:#FDECEE;
-  --shadow:0 1px 2px rgba(19,34,27,.05), 0 10px 30px rgba(19,34,27,.08);
+  --brand:#B25E08; --brand-dark:#8F4A06; --brand-light:#D97D1E;
+  --ink:#2F3944; --ink-dark:#1E252C;
+  --tint:#FBF0E2; --tint-2:#F0D6AE;
+  --bg:#F1F2F4; --surface:#FFFFFF;
+  --text:#14171A; --text-2:#3B434B; --muted:#606A74; --line:#DEE2E6;
+  --warn:#A85A08; --warn-bg:#FDF1E1; --warn-line:#EFD9B4;
+  --ok:#146C43; --ok-bg:#E6F3EC; --ok-line:#BEDFCD;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:ui-monospace,"Roboto Mono",SFMono-Regular,Menlo,Consolas,monospace;
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0D1411; --surface:#161F1A; --surface-2:#1E2A24;
-    --ink:#E9F0EA; --ink-2:#BECABF; --muted:#8B9C91; --rule:#26332C;
-    --brand:#2ECC71; --brand-dark:#3ADC85; --tint:#132C1E; --tint-2:#1D4630;
-    --mark:#FF7A52; --mark-tint:#33170F;
-    --warn:#F0B65C; --warn-tint:#2E2312;
-    --red:#FF8A8A; --red-tint:#33161A;
-    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.45);
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0D1411; --surface:#161F1A; --surface-2:#1E2A24;
-  --ink:#E9F0EA; --ink-2:#BECABF; --muted:#8B9C91; --rule:#26332C;
-  --brand:#2ECC71; --brand-dark:#3ADC85; --tint:#132C1E; --tint-2:#1D4630;
-  --mark:#FF7A52; --mark-tint:#33170F;
-  --warn:#F0B65C; --warn-tint:#2E2312;
-  --red:#FF8A8A; --red-tint:#33161A;
-  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.45);
-}
-*{box-sizing:border-box;}
-html{-webkit-text-size-adjust:100%;}
-body{margin:0;background:var(--bg);color:var(--ink);
-  font-family:"Gothic A1","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
-  font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased;}
-.wrap{max-width:680px;margin:0 auto;padding:0 20px 96px;}
-code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:15px;
-  background:var(--surface-2);padding:2px 7px;border-radius:6px;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);
+  font-size:16px;line-height:1.7;-webkit-text-size-adjust:100%;}
+.wrap{max-width:680px;margin:0 auto;padding:0 20px 60px;}
 
 /* 표지 */
-.cover{background:var(--brand);margin:0 -20px 40px;padding:52px 24px 40px;color:#fff;border-radius:0 0 28px 28px;}
-.cover .eb{font-size:12.5px;font-weight:800;letter-spacing:.16em;opacity:.85;margin:0 0 12px;}
-.cover h1{font-size:clamp(30px,7vw,40px);font-weight:900;letter-spacing:-.03em;line-height:1.2;margin:0 0 14px;}
-.cover p{font-size:16.5px;margin:0;opacity:.95;line-height:1.7;}
-.cover .badge{display:inline-block;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.32);
-  border-radius:999px;padding:7px 16px;font-size:14px;font-weight:800;margin-top:18px;}
-
-/* 단계 */
-section{margin:44px 0;scroll-margin-top:16px;}
-.sh{display:flex;gap:14px;align-items:center;margin-bottom:6px;}
-.sn{width:42px;height:42px;border-radius:13px;background:var(--brand);color:#fff;flex-shrink:0;
-  font-size:19px;font-weight:900;display:flex;align-items:center;justify-content:center;
-  font-family:"IBM Plex Mono",monospace;}
-.sn.red{background:var(--red);} .sn.grey{background:var(--muted);} .sn.warn{background:var(--warn);}
-h2{font-size:22px;font-weight:900;letter-spacing:-.02em;margin:0;line-height:1.3;}
-.lead{font-size:16.5px;color:var(--ink-2);margin:12px 0 20px;}
-.lead b{color:var(--ink);font-weight:800;}
-
-ol.steps{counter-reset:s;list-style:none;margin:0 0 8px;padding:0;}
-ol.steps > li{position:relative;padding-left:42px;margin-bottom:18px;counter-increment:s;font-size:17px;}
-ol.steps > li::before{content:counter(s);position:absolute;left:0;top:2px;
-  width:28px;height:28px;border-radius:9px;background:var(--mark);color:#fff;
-  font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;
-  font-family:"IBM Plex Mono",monospace;}
-ol.steps b{background:var(--mark-tint);color:var(--mark);padding:2px 8px;border-radius:7px;font-weight:800;}
-.sub{display:block;font-size:15px;color:var(--muted);margin-top:4px;line-height:1.6;}
-
-.tip,.warnbox{display:flex;gap:13px;border-radius:16px;padding:17px 19px;margin:22px 0;}
-.tip{background:var(--tint);border:1px solid var(--tint-2);}
-.warnbox{background:var(--warn-tint);border:1px solid rgba(180,83,9,.3);}
-.ic{width:26px;height:26px;border-radius:9px;color:#fff;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;}
-.tip .ic{background:var(--brand);} .warnbox .ic{background:var(--warn);}
-.tx{font-size:16px;color:var(--ink-2);}
-.tip .tx b{color:var(--ink);font-weight:800;}
-.warnbox .tx b{color:var(--warn);font-weight:800;}
-
-/* 휴대폰 그림 */
-.shots{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:24px 0 8px;}
-.shot{flex:0 0 auto;text-align:center;}
-.ph{width:216px;background:#1B2A22;border-radius:26px;padding:6px;box-shadow:var(--shadow);}
-.scr{background:#F4F6F8;border-radius:21px;overflow:hidden;color:#1A1A1A;
-  font-size:11.5px;line-height:1.5;min-height:300px;display:flex;flex-direction:column;}
-.scr .bar{background:#00B14F;color:#fff;padding:8px 12px 3px;font-size:9px;
-  display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;}
-.scr .hd{background:#00B14F;color:#fff;padding:4px 14px 16px;}
-.scr .hd .nm{font-size:15px;font-weight:800;}
-.scr .hd .dt{font-size:9.5px;opacity:.85;}
-.scr .bd{padding:12px;flex:1;}
-.lbl{font-size:9px;font-weight:800;color:#8A8A8A;letter-spacing:.08em;margin-bottom:6px;}
-.card{background:#fff;border-radius:13px;padding:11px 12px;display:flex;align-items:center;gap:9px;
-  box-shadow:0 1px 3px rgba(16,24,20,.08);}
-.card .t{font-size:12px;font-weight:700;}
-.tgl{width:34px;height:20px;border-radius:99px;background:#D6DBD8;position:relative;margin-left:auto;flex-shrink:0;}
-.tgl::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:99px;background:#fff;}
-.tgl.on{background:#00B14F;} .tgl.on::after{left:auto;right:2px;}
-.hint{font-size:9.5px;margin-top:7px;line-height:1.5;color:#8A8A8A;}
-.hint.warn{color:#B45309;font-weight:800;}
-.hint.ok{color:#00913F;font-weight:800;}
-.shot .cap{font-size:14px;color:var(--muted);margin-top:10px;line-height:1.5;max-width:216px;}
-.shot .cap b{color:var(--ink);font-weight:800;}
-
-/* 팝업 모형 */
-.pop{background:#fff;border-radius:15px;padding:13px;margin:auto 0 0;box-shadow:0 -4px 16px rgba(0,0,0,.12);}
-.pop .pt{font-size:12.5px;font-weight:800;}
-.pop .pb{font-size:10.5px;color:#5A5A5A;margin-top:5px;line-height:1.6;}
-.pop .pr{display:flex;gap:6px;margin-top:11px;}
-.pop .pr span{flex:1;text-align:center;border-radius:99px;padding:7px 0;font-size:11px;font-weight:800;}
-.pop .pr .no{background:#fff;border:1.4px solid #D6DBD8;color:#6A7B70;}
-.pop .pr .yes{background:#00B14F;color:#fff;}
-.dim{background:rgba(0,0,0,.35);}
-
-/* 안드로이드 설정 모형 */
-.scr.sys{background:#fff;}
-.sysbar{background:#fff;color:#1A1A1A;padding:12px 14px 8px;font-size:15px;font-weight:800;border-bottom:1px solid #EEE;}
-.sysrow{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #F2F2F2;font-size:12px;}
-.sysrow .ico{width:22px;height:22px;border-radius:7px;background:#EDF1EE;display:flex;align-items:center;justify-content:center;font-size:11px;}
-.sysrow .arw{margin-left:auto;color:#B0B8B3;font-size:12px;}
-.sysrow.on{background:#F0F7F3;font-weight:800;}
-
-/* 크롬 모형 */
-.scr.chr{background:#fff;}
-.chrbar{display:flex;align-items:center;gap:7px;background:#F1F3F4;padding:8px 10px;}
-.chrbar .lock{width:20px;height:20px;border-radius:99px;background:#fff;border:1px solid #DADCE0;
-  display:flex;align-items:center;justify-content:center;font-size:10px;}
-.chrbar .url{flex:1;background:#fff;border:1px solid #DADCE0;border-radius:99px;padding:3px 9px;
-  font-family:"IBM Plex Mono",monospace;font-size:8.5px;color:#5F6368;overflow:hidden;
-  text-overflow:ellipsis;white-space:nowrap;}
-.chrmenu{background:#fff;border-radius:12px;margin:10px;box-shadow:0 4px 16px rgba(0,0,0,.16);overflow:hidden;}
-.chrmenu div{padding:10px 13px;font-size:11.5px;border-bottom:1px solid #F2F2F2;display:flex;align-items:center;gap:8px;}
-.chrmenu div:last-child{border-bottom:none;}
-.chrmenu .val{margin-left:auto;color:#5F6368;font-size:10.5px;}
-.chrmenu .sel{background:#E8F0FE;font-weight:800;color:#1A73E8;}
-
-.hl{position:relative;outline:2.5px solid var(--mark);outline-offset:2px;border-radius:9px;z-index:1;}
-
-/* 알림 예시 */
-.notif-demo{background:linear-gradient(160deg,#1B3D2B,#0E1F17);border-radius:20px;padding:18px 14px;margin:22px 0;}
-.nd-t{color:#fff;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:34px;padding:8px 0 14px;}
-.nf{background:rgba(255,255,255,.96);border-radius:14px;padding:11px 13px;margin-bottom:9px;}
-.nf:last-child{margin-bottom:0;}
-.nf-h{display:flex;align-items:center;gap:7px;font-size:10.5px;color:#8A8A8A;font-weight:700;}
-.nf-h i{width:16px;height:16px;border-radius:5px;background:#00B14F;color:#fff;font-style:normal;
-  font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;}
-.nf-t{font-size:13.5px;font-weight:800;margin-top:5px;color:#1A1A1A;}
-.nf-b{font-size:12px;color:#4A4A4A;margin-top:3px;line-height:1.55;}
-
-.faq details{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:0 20px;margin-bottom:9px;}
-.faq summary{cursor:pointer;padding:16px 0;font-size:16.5px;font-weight:800;list-style:none;display:flex;gap:11px;align-items:center;}
-.faq summary::-webkit-details-marker{display:none;}
-.faq summary::before{content:"?";width:24px;height:24px;border-radius:8px;background:var(--surface-2);
-  color:var(--muted);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.faq p{margin:0 0 18px;font-size:16px;color:var(--ink-2);}
-
-.when{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:22px 24px;
-  box-shadow:var(--shadow);margin:24px 0;}
-.when h3{font-size:17px;font-weight:800;margin:0 0 16px;}
-.wrow{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--rule);}
-.wrow:first-of-type{border-top:none;padding-top:0;}
-.wt{font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:600;color:var(--brand-dark);
-  flex-shrink:0;width:62px;}
-.wd{font-size:16px;color:var(--ink-2);}
-.wd b{color:var(--ink);font-weight:800;}
-
-.foot{margin-top:56px;padding-top:22px;border-top:1px solid var(--rule);font-size:15px;color:var(--muted);text-align:center;}
-.cta{margin-top:18px;}
+.cover{background:linear-gradient(165deg,#3E4A57 0%,var(--ink) 55%,var(--ink-dark) 100%);
+  color:#fff;margin:0 -20px 34px;padding:42px 26px 40px;border-radius:0 0 28px 28px;}
+.eb{font-size:12.5px;font-weight:800;letter-spacing:.14em;opacity:.8;margin:0 0 12px;}
+.cover h1{font-size:34px;font-weight:900;letter-spacing:-.035em;line-height:1.22;margin:0 0 14px;}
+.cover p{font-size:15.5px;line-height:1.7;opacity:.94;margin:0;}
+.badge{display:inline-block;margin-top:20px;background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.34);border-radius:999px;
+  padding:7px 16px;font-size:13.5px;font-weight:800;}
+.cta{margin-top:20px;}
 .cbtn{display:inline-block;background:#fff;color:var(--brand-dark);font-weight:900;
-  font-size:17px;letter-spacing:-.02em;padding:13px 24px;border-radius:14px;
-  text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.14);}
-.cbtn:active{transform:translateY(1px);}
-@media (max-width:480px){
-  .shots{gap:14px;}
-  .ph{width:196px;}
-}
-</style>
+  font-size:16px;padding:14px 26px;border-radius:14px;text-decoration:none;
+  box-shadow:0 6px 18px rgba(0,0,0,.18);}
 
+/* 섹션 */
+section{margin-bottom:44px;}
+.sh{display:flex;align-items:center;gap:13px;margin-bottom:14px;}
+.sn{width:38px;height:38px;border-radius:11px;background:var(--ink);color:#fff;
+  font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sn.w{background:var(--warn);} .sn.k{background:var(--ok);}
+h2{font-size:22px;font-weight:900;letter-spacing:-.03em;margin:0;}
+.lead{font-size:16px;color:var(--text-2);margin:0 0 18px;}
+
+ol.do{margin:0;padding:0;list-style:none;counter-reset:d;}
+ol.do > li{counter-increment:d;position:relative;padding-left:38px;margin-bottom:15px;font-size:16px;color:var(--text-2);}
+ol.do > li::before{content:counter(d);position:absolute;left:0;top:3px;width:26px;height:26px;
+  border-radius:50%;background:var(--tint);color:var(--brand-dark);font-size:13.5px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;}
+b{color:var(--text);font-weight:800;}
+.tag{display:inline-block;background:var(--tint);color:var(--brand-dark);
+  font-weight:800;padding:2px 9px;border-radius:7px;font-size:15px;}
+code{font-family:var(--mono);font-size:14px;background:var(--tint);color:var(--brand-dark);
+  padding:2px 7px;border-radius:6px;}
+
+/* 폰 목업 */
+.shots{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:22px 0 8px;}
+.shot{text-align:center;}
+.ph{width:224px;border:7px solid #1B2027;border-radius:26px;overflow:hidden;
+  background:var(--surface);box-shadow:0 10px 26px rgba(16,26,38,.16);}
+.ph-top{background:var(--ink);color:#fff;padding:12px 13px 15px;}
+.ph-d{font-size:11.5px;opacity:.92;font-weight:700;}
+.ph-h{font-size:15px;font-weight:900;margin-top:3px;}
+.ph-b{padding:11px 11px 14px;}
+.cap{font-size:13.5px;color:var(--muted);margin-top:11px;line-height:1.55;}
+.cap b{color:var(--text);}
+
+.mini{background:var(--surface);border:1px solid var(--line);border-radius:11px;
+  padding:9px 10px;margin-bottom:8px;text-align:left;}
+.mini .r1{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;}
+.mini .num{width:19px;height:19px;border-radius:6px;background:var(--ink);color:#fff;
+  font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.mini .tm{margin-left:auto;font-family:var(--mono);font-size:13px;font-weight:700;}
+.mini .r2{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-2);margin-top:6px;}
+.plate{display:inline-flex;align-items:center;gap:4px;background:#1B2027;color:#F3F6F8;
+  border-radius:5px;padding:2px 6px 2px 4px;font-family:var(--mono);font-size:11px;font-weight:700;}
+.plate i{width:3px;height:9px;border-radius:1px;background:#F5A524;}
+.bpri{background:var(--brand);color:#fff;border-radius:999px;padding:7px 0;text-align:center;
+  font-size:12.5px;font-weight:800;margin-left:auto;width:66px;}
+.nbox{border-radius:12px;padding:11px 11px 10px;text-align:left;}
+.nbox.w{background:#FAE8E6;border:1.4px solid #F2CFCB;}
+.nbox.k{background:var(--tint);border:1.4px solid var(--tint-2);}
+.nbox .nt{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:900;}
+.nbox.w .nt{color:#93211A;} .nbox.k .nt{color:var(--brand-dark);}
+.nbox .nb{font-family:var(--mono);font-size:10.5px;color:#fff;padding:2px 6px;border-radius:5px;}
+.nbox.w .nb{background:#B3261E;} .nbox.k .nb{background:var(--brand);}
+.chips{margin-top:8px;}
+.chip{display:inline-block;font-size:11.5px;padding:3px 9px;border-radius:999px;
+  background:#FFFFFF;color:#93211A;font-weight:700;margin:0 4px 4px 0;}
+.nrow{display:flex;gap:7px;font-size:11.5px;padding:5px 0;border-bottom:1px solid var(--line);}
+.nrow:last-child{border-bottom:none;}
+.nrow b{width:44px;} .nrow em{font-style:normal;font-family:var(--mono);color:var(--muted);}
+.nrow span{margin-left:auto;font-weight:800;color:var(--brand-dark);}
+.cbar{background:var(--brand);color:#fff;border-radius:999px;padding:8px 0;text-align:center;
+  font-size:12.5px;font-weight:800;margin-top:9px;}
+
+/* 알림 박스 */
+.note{display:flex;gap:11px;border-radius:14px;padding:15px 16px;margin-top:18px;font-size:15px;line-height:1.68;}
+.note.k{background:var(--ok-bg);border:1px solid var(--ok-line);color:#0F5A38;}
+.note.w{background:var(--warn-bg);border:1px solid var(--warn-line);color:#7C4206;}
+.note .ic{flex-shrink:0;font-weight:900;}
+.note b{color:inherit;}
+
+/* 복사 예시 */
+pre{background:#151A20;color:#E6EDF3;border-radius:14px;padding:16px 17px;
+  font-family:var(--mono);font-size:13px;line-height:1.75;overflow-x:auto;margin:16px 0 0;}
+
+details{background:var(--surface);border-radius:14px;padding:15px 17px;margin-bottom:10px;
+  box-shadow:0 1px 2px rgba(16,24,32,.06);}
+summary{font-size:16px;font-weight:800;cursor:pointer;list-style:none;}
+summary::-webkit-details-marker{display:none;}
+summary::before{content:"?";display:inline-flex;align-items:center;justify-content:center;
+  width:23px;height:23px;border-radius:50%;background:var(--tint);color:var(--brand-dark);
+  font-size:13px;font-weight:900;margin-right:10px;vertical-align:-5px;}
+details p{margin:12px 0 0;font-size:15px;color:var(--text-2);line-height:1.7;}
+.foot{text-align:center;color:var(--muted);font-size:13.5px;margin-top:40px;line-height:1.8;
+  border-top:1px solid var(--line);padding-top:26px;}
+
+@media (max-width:480px){ .ph{width:200px;} .shots{gap:14px;} }
+</style>
 </head>
 <body>
 <div class="wrap">
 
 <div class="cover">
   <p class="eb">SIEL NOIDA · 퇴근 셔틀</p>
-  <h1>알림 설정<br>안내</h1>
-  <p>앱을 설치하신 뒤 <b>한 번만</b> 해주시면 됩니다.<br>이걸 하셔야 4시 30분 알림을 받으실 수 있습니다.</p>
-  <span class="badge">약 2분</span>
+  <h1>퇴근셔틀 앱<br>사용 안내</h1>
+  <p>설치 후 <b>이름만 한 번</b> 넣으시면 됩니다.<br>따로 설정하실 것은 없습니다.</p>
+  <span class="badge">약 1분</span>
   <div class="cta"><a class="cbtn" href="https://sajui80.github.io/shuttle-board2/">앱 열기 →</a></div>
 </div>
 
-<!-- ============ 1 ============ -->
-<section id="s1">
-  <div class="sh"><div class="sn">1</div><h2>앱 열고 이름 등록</h2></div>
-  <p class="lead">처음 한 번만 이름을 넣으시면 됩니다. 다음부터는 바로 열립니다.</p>
-
-  <ol class="steps">
-    <li><b>퇴근셔틀</b> 앱을 엽니다.
-      <span class="sub">앱이 없으시면 아래 주소로 접속하셔도 됩니다.<br><code>sajui80.github.io/shuttle-board2/</code></span></li>
-    <li>이름 입력 화면이 나오면 <b>본인 이름</b>을 넣고 <b>시작하기</b>를 누릅니다.</li>
-  </ol>
-</section>
-
-<!-- ============ 2 ============ -->
-<section id="s2">
-  <div class="sh"><div class="sn">2</div><h2>알림 켜기</h2></div>
-  <p class="lead"><b>&ldquo;허용&rdquo;을 두 번 눌러야 합니다.</b> 앱이 한 번 묻고, 안드로이드가 한 번 더 묻습니다.
-  둘 중 하나라도 &ldquo;차단&rdquo;을 누르면 알림이 오지 않습니다.</p>
-
-  <div class="shots">
-    <div class="shot">
-      <div class="ph"><div class="scr">
-        <div class="bar"><span>16:42</span><span>▮▮▮</span></div>
-        <div class="hd"><div class="dt">2026년 9월 4일 금요일</div><div class="nm">정상준님, 안녕하세요</div></div>
-        <div class="bd dim" style="flex:1"></div>
-        <div class="pop">
-          <div class="pt">알림을 받으시겠습니까?</div>
-          <div class="pb">하루 두 번만 보냅니다.<br><b>16:30</b> 미입력 안내<br><b>17:00</b> 마감 현황</div>
-          <div class="pr"><span class="no">나중에</span><span class="yes hl">알림 받기</span></div>
-        </div>
-      </div></div>
-      <div class="cap"><b>①</b> 앱이 먼저 묻습니다<br>→ <b>알림 받기</b></div>
-    </div>
-
-    <div class="shot">
-      <div class="ph"><div class="scr">
-        <div class="bar"><span>16:42</span><span>▮▮▮</span></div>
-        <div class="hd"><div class="dt">2026년 9월 4일 금요일</div><div class="nm">정상준님, 안녕하세요</div></div>
-        <div class="bd dim" style="flex:1"></div>
-        <div class="pop">
-          <div class="pt">&ldquo;퇴근셔틀&rdquo;에서 알림을<br>보내도록 허용하시겠습니까?</div>
-          <div class="pr"><span class="no">차단</span><span class="yes hl">허용</span></div>
-        </div>
-      </div></div>
-      <div class="cap"><b>②</b> 안드로이드가 한 번 더<br>→ <b>허용</b></div>
-    </div>
-  </div>
-
-  <div class="warnbox">
-    <div class="ic">!</div>
-    <div class="tx"><b>여기서 &ldquo;차단&rdquo;을 누르면 되돌리기 번거롭습니다.</b>
-    안드로이드는 한 번 차단하면 앱이 다시 묻지 못하게 막습니다.
-    실수로 누르셨다면 아래 <b>&ldquo;알림이 차단됐을 때&rdquo;</b> 를 보시면 됩니다.</div>
-  </div>
-</section>
-
-<!-- ============ 3 ============ -->
-<section id="s3">
-  <div class="sh"><div class="sn">3</div><h2>제대로 켜졌는지 확인</h2></div>
-  <p class="lead">앱 아래쪽 <b>내정보</b> 를 눌러 스위치 색을 보시면 됩니다.</p>
-
-  <div class="shots">
-    <div class="shot">
-      <div class="ph"><div class="scr">
-        <div class="bar"><span>16:42</span><span>▮▮▮</span></div>
-        <div class="hd"><div class="nm">정상준</div><div class="dt">2026년 9월 2일부터 이용 중</div></div>
-        <div class="bd">
-          <div class="lbl">알림</div>
-          <div class="card"><span>🔔</span><span class="t">퇴근 셔틀 알림 받기</span><span class="tgl"></span></div>
-          <div class="hint">16:30 미입력 안내와 17:00 마감 현황을 보냅니다.</div>
-          <div class="hint warn">지금은 꺼져 있습니다. 스위치를 켜주세요.</div>
-        </div>
-      </div></div>
-      <div class="cap">회색 = <b>꺼짐</b><br>스위치를 눌러주세요</div>
-    </div>
-
-    <div class="shot">
-      <div class="ph"><div class="scr">
-        <div class="bar"><span>16:42</span><span>▮▮▮</span></div>
-        <div class="hd"><div class="nm">정상준</div><div class="dt">2026년 9월 2일부터 이용 중</div></div>
-        <div class="bd">
-          <div class="lbl">알림</div>
-          <div class="card"><span>🔔</span><span class="t">퇴근 셔틀 알림 받기</span><span class="tgl on hl"></span></div>
-          <div class="hint">16:30 미입력 안내와 17:00 마감 현황을 보냅니다.</div>
-          <div class="hint ok">설정 완료</div>
-        </div>
-      </div></div>
-      <div class="cap">초록색 = <b>켜짐</b><br>이 상태면 끝입니다</div>
-    </div>
-  </div>
-
-  <div class="tip">
-    <div class="ic">✓</div>
-    <div class="tx"><b>초록색이 되고 주황색 경고 문구가 사라지면 완료입니다.</b> 더 하실 것 없습니다.</div>
-  </div>
-</section>
-
-<!-- ============ 문제 1 ============ -->
-<section id="t1">
-  <div class="sh"><div class="sn red">!</div><h2>알림이 차단됐을 때</h2></div>
-  <p class="lead">스위치를 눌렀는데 <b>&ldquo;알림이 차단되어 있습니다&rdquo;</b> 창이 뜨면,
-  휴대폰 설정에서 직접 켜주셔야 합니다. 앱은 더 이상 물어볼 수 없습니다.</p>
-
-  <ol class="steps">
-    <li>휴대폰 <b>설정</b> 앱을 엽니다.</li>
-    <li><b>애플리케이션</b> 을 누릅니다.
-      <span class="sub">기종에 따라 &ldquo;앱&rdquo; 으로 표시되기도 합니다.</span></li>
-    <li>목록에서 <b>퇴근셔틀</b> 을 찾아 누릅니다.</li>
-    <li><b>알림</b> 을 누릅니다.</li>
-    <li>맨 위 <b>알림 표시</b> 스위치를 <b>켭니다</b>.</li>
-    <li>앱으로 돌아가 <b>완전히 종료</b>했다가 다시 열고, 내정보의 스위치를 한 번 더 누릅니다.
-      <span class="sub">완전히 종료 = 최근 앱 목록(□ 버튼)에서 위로 밀어 닫기</span></li>
-  </ol>
-
-  <div class="shots">
-    <div class="shot">
-      <div class="ph"><div class="scr sys">
-        <div class="sysbar">애플리케이션</div>
-        <div class="sysrow"><span class="ico">📷</span>카메라<span class="arw">›</span></div>
-        <div class="sysrow"><span class="ico">💬</span>메시지<span class="arw">›</span></div>
-        <div class="sysrow on hl"><span class="ico">🚐</span>퇴근셔틀<span class="arw">›</span></div>
-        <div class="sysrow"><span class="ico">🌐</span>Chrome<span class="arw">›</span></div>
-      </div></div>
-      <div class="cap">설정 → 애플리케이션<br>→ <b>퇴근셔틀</b></div>
-    </div>
-
-    <div class="shot">
-      <div class="ph"><div class="scr sys">
-        <div class="sysbar">퇴근셔틀</div>
-        <div class="sysrow on hl"><span class="ico">🔔</span>알림<span class="arw">›</span></div>
-        <div class="sysrow"><span class="ico">🔑</span>권한<span class="arw">›</span></div>
-        <div class="sysrow"><span class="ico">💾</span>저장공간<span class="arw">›</span></div>
-        <div style="padding:14px;">
-          <div class="card"><span class="t">알림 표시</span><span class="tgl on hl"></span></div>
-        </div>
-      </div></div>
-      <div class="cap"><b>알림</b> → <b>알림 표시</b><br>스위치 켜기</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 문제 2 ============ -->
-<section id="t2">
-  <div class="sh"><div class="sn warn">!</div><h2>그래도 안 될 때 &mdash; 크롬 설정</h2></div>
-  <p class="lead">퇴근셔틀 앱은 <b>안쪽에서 크롬을 사용</b>합니다. 그래서 크롬에 저장된 사이트 권한이 따로 차단돼 있으면
-  앱 설정을 켜도 알림이 오지 않습니다. 이 경우 크롬에서 풀어주셔야 합니다.</p>
-
-  <ol class="steps">
-    <li><b>크롬</b> 앱을 엽니다.</li>
-    <li>주소창에 아래를 입력해 접속합니다.
-      <span class="sub"><code>sajui80.github.io/shuttle-board2/</code></span></li>
-    <li>주소창 <b>왼쪽 자물쇠(또는 튜닝) 아이콘</b> 을 누릅니다.</li>
-    <li><b>권한</b> 또는 <b>사이트 설정</b> 을 누릅니다.</li>
-    <li><b>알림</b> 항목을 <b>허용</b> 으로 바꿉니다.</li>
-    <li>퇴근셔틀 앱으로 돌아가 완전히 종료했다가 다시 열고, 스위치를 누릅니다.</li>
-  </ol>
-
-  <div class="shots">
-    <div class="shot">
-      <div class="ph"><div class="scr chr">
-        <div class="chrbar">
-          <span class="lock hl">🔒</span>
-          <span class="url">sajui80.github.io/shuttle-board2/</span>
-        </div>
-        <div style="flex:1;background:#00B14F"></div>
-      </div></div>
-      <div class="cap">주소창 왼쪽<br><b>자물쇠 아이콘</b></div>
-    </div>
-
-    <div class="shot">
-      <div class="ph"><div class="scr chr">
-        <div class="chrbar"><span class="lock">🔒</span><span class="url">sajui80.github.io</span></div>
-        <div class="chrmenu">
-          <div style="font-weight:800">사이트 설정</div>
-          <div>위치<span class="val">차단</span></div>
-          <div class="sel hl">알림<span class="val">허용 ▾</span></div>
-          <div>카메라<span class="val">차단</span></div>
-        </div>
-        <div style="flex:1"></div>
-      </div></div>
-      <div class="cap"><b>알림</b> 을 찾아<br><b>허용</b> 으로 변경</div>
-    </div>
-  </div>
-
-  <div class="tip">
-    <div class="ic">i</div>
-    <div class="tx"><b>메뉴 이름이 조금 다를 수 있습니다.</b> 크롬 버전에 따라
-    &ldquo;권한&rdquo;, &ldquo;사이트 설정&rdquo;, &ldquo;사용 권한&rdquo; 으로 나옵니다.
-    <b>알림</b> 이라는 글자를 찾으시면 됩니다.</div>
-  </div>
-
-  <div class="warnbox">
-    <div class="ic">!</div>
-    <div class="tx"><b>그래도 안 되면 앱을 지웠다가 다시 설치</b>하시면 권한이 초기화됩니다.
-    이름은 다시 입력하셔야 합니다. 번거로우시면 <b>담당자에게 말씀해 주세요.</b></div>
-  </div>
-</section>
-
-<!-- ============ 언제 오나 ============ -->
+<!-- 1 -->
 <section>
-  <div class="sh"><div class="sn grey">?</div><h2>언제 알림이 오나요</h2></div>
-
-  <div class="when">
-    <h3>평일에만, 하루 두 번</h3>
-    <div class="wrow"><div class="wt">16:30</div>
-      <div class="wd"><b>미입력 안내</b><br>아직 탑승도 미이용도 등록 안 하신 분<b>에게만</b> 갑니다.
-      이미 등록하셨으면 오지 않습니다.</div></div>
-    <div class="wrow"><div class="wt">17:00</div>
-      <div class="wd"><b>마감 현황</b><br>전원에게 오늘 배차 결과를 보내드립니다.
-      내가 탈 차량과 기사님 이름이 함께 표시됩니다.</div></div>
-  </div>
-
-  <div class="notif-demo">
-    <div class="nd-t">16:30</div>
-    <div class="nf">
-      <div class="nf-h"><i>셔</i>퇴근셔틀 · 지금</div>
-      <div class="nf-t">🚌 퇴근 셔틀 미입력 안내</div>
-      <div class="nf-b">17시 마감까지 30분 남았습니다. 탑승 또는 미이용을 등록해 주세요.</div>
-    </div>
-    <div class="nf" style="opacity:.55">
-      <div class="nf-h"><i>셔</i>퇴근셔틀 · 어제 17:00</div>
-      <div class="nf-t">🕔 오늘 퇴근 셔틀 마감 현황</div>
-      <div class="nf-b">내 차량 3호차 19:00 · 기사 Tarun<br>1호차 5/5 · 2호차 4/5 · 3호차 3/5 · 4호차 1/5</div>
-    </div>
-  </div>
-
-  <div class="tip">
-    <div class="ic">✓</div>
-    <div class="tx"><b>주말과 회사 휴무일에는 보내지 않습니다.</b> 그 외에 다른 알림은 일절 없습니다.</div>
+  <div class="sh"><div class="sn">1</div><h2>이름 등록</h2></div>
+  <p class="lead">최초 한 번만 입력하면 이 휴대폰에 저장됩니다.</p>
+  <ol class="do">
+    <li><b>퇴근셔틀2</b> 앱을 엽니다. 앱이 없으시면 <code>sajui80.github.io/shuttle-board2/</code> 로 접속하셔도 됩니다.</li>
+    <li>이름 입력 화면이 나오면 <span class="tag">본인 이름</span> 을 넣고 <span class="tag">시작하기</span> 를 누릅니다.</li>
+    <li>다음부터는 바로 홈 화면이 열립니다.</li>
+  </ol>
+  <div class="note k"><span class="ic">✓</span>
+    <span>알림 권한, 크롬 설정 같은 것은 <b>필요 없습니다.</b> 이름만 넣으시면 끝입니다.</span>
   </div>
 </section>
 
-<!-- ============ FAQ ============ -->
+<!-- 2 -->
 <section>
-  <div class="sh"><div class="sn grey">FAQ</div><h2>자주 묻는 질문</h2></div>
-  <div class="faq" style="margin-top:22px">
-    <details>
-      <summary>알림을 받고 싶지 않습니다</summary>
-      <p><b>내정보 → 퇴근 셔틀 알림 받기</b> 스위치를 끄시면 됩니다. 언제든 다시 켜실 수 있습니다.
-      다만 4시 30분 안내를 못 받으시면 입력을 놓치기 쉽습니다.</p>
-    </details>
-    <details>
-      <summary>앱을 지웠다 다시 깔면 이름을 또 넣어야 하나요</summary>
-      <p>네, 다시 넣으셔야 합니다. 같은 이름으로 넣으시면 되고, 이전 기록은 담당자가 정리합니다.</p>
-    </details>
-    <details>
-      <summary>휴대폰을 바꿨습니다</summary>
-      <p>새 휴대폰에 앱을 설치하고 <b>같은 이름</b>으로 등록하신 뒤, 알림을 다시 켜주시면 됩니다.
-      이전 휴대폰 기록은 담당자에게 말씀해 주시면 정리해 드립니다.</p>
-    </details>
-    <details>
-      <summary>앱 설치가 안 됩니다</summary>
-      <p>법인 휴대폰은 외부 앱 설치가 막혀 있을 수 있습니다. 그런 경우
-      <code>sajui80.github.io/shuttle-board2/</code> 로 접속하신 뒤
-      브라우저 메뉴에서 <b>홈 화면에 추가</b> 를 하시면 앱과 똑같이 쓰실 수 있습니다.
-      알림도 동일하게 받으실 수 있습니다.</p>
-    </details>
-    <details>
-      <summary>알림이 오다가 갑자기 안 옵니다</summary>
-      <p>휴대폰의 <b>배터리 절약 모드</b>가 백그라운드 알림을 막는 경우가 있습니다.
-      설정 → 애플리케이션 → 퇴근셔틀 → <b>배터리</b> 에서 <b>제한 없음</b> 으로 바꿔보세요.</p>
-    </details>
+  <div class="sh"><div class="sn">2</div><h2>탑승 등록</h2></div>
+  <p class="lead">매일 <b>17:00 전까지</b> 탈 차량을 고르시면 됩니다.</p>
+
+  <div class="shots">
+    <div class="shot">
+      <div class="ph">
+        <div class="ph-top"><div class="ph-d">[W37] 2026년 9월 8일 (화)</div><div class="ph-h">차량 선택</div></div>
+        <div class="ph-b">
+          <div class="mini">
+            <div class="r1"><span class="num">1</span>1호차<span class="tm">17:40</span></div>
+            <div class="r2">기사 Devender <span class="plate"><i></i>8999</span>
+              <span style="margin-left:auto;color:#B3261E;font-weight:800">만석</span></div>
+          </div>
+          <div class="mini">
+            <div class="r1"><span class="num">2</span>2호차<span class="tm">18:30</span></div>
+            <div class="r2">기사 Tarun <span class="plate"><i></i>1048</span>
+              <div class="bpri">탑승</div></div>
+          </div>
+          <div class="mini">
+            <div class="r1"><span class="num">3</span>3호차<span class="tm">19:00</span></div>
+            <div class="r2">기사 Amit <span class="plate"><i></i>5462</span>
+              <div class="bpri">탑승</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="cap"><b>탑승</b> 버튼을 누르면<br>바로 등록됩니다</div>
+    </div>
+  </div>
+
+  <ol class="do" style="margin-top:20px">
+    <li>차량 카드의 <span class="tag">탑승</span> 을 누릅니다. 검은 번호판은 <b>기사님 차량번호 뒤 4자리</b>입니다.</li>
+    <li>차량을 바꾸시려면 다른 차량의 <span class="tag">변경</span> 을 누르시면 됩니다.</li>
+    <li>수화기 아이콘을 누르면 기사님께 바로 전화가 걸립니다.</li>
+    <li>지연·집결 장소 같은 전달 사항은 <span class="tag">+ 메모</span> 로 남기실 수 있습니다.</li>
+  </ol>
+</section>
+
+<!-- 3 -->
+<section>
+  <div class="sh"><div class="sn">3</div><h2>미이용 등록</h2></div>
+  <p class="lead">자차·출장·휴가 등으로 셔틀을 타지 않으시는 날에 등록합니다.</p>
+  <ol class="do">
+    <li>홈 화면 아래 <span class="tag">오늘은 이용하지 않습니다</span> 를 누릅니다.</li>
+    <li>사유(자차 / 출장 / 휴가 / 기타)를 고릅니다.</li>
+    <li>기간을 <b>오늘만 · 내일까지 · 이번 주 · 직접 지정</b> 중에서 고릅니다.</li>
+    <li>맨 아래 <span class="tag">미이용 등록</span> 을 누릅니다.</li>
+  </ol>
+  <div class="note k"><span class="ic">✓</span>
+    <span>등록한 기간에는 <b>미입력 명단에 표시되지 않습니다.</b> 기간이 끝나면 자동으로 해제됩니다.</span>
+  </div>
+  <div class="note w"><span class="ic">!</span>
+    <span>탑승과 미이용은 <b>동시에 등록되지 않습니다.</b> 미이용 상태에서 탑승을 누르면 미이용이 자동 해제되고, 탑승 상태에서 미이용을 등록하면 탑승이 자동 취소됩니다.</span>
   </div>
 </section>
 
-<p class="foot">퇴근 셔틀 앱 · 문의는 담당자에게 말씀해 주세요</p>
+<!-- 4 -->
+<section>
+  <div class="sh"><div class="sn w">4</div><h2>16:30 — 미입력 명단</h2></div>
+  <p class="lead">16시 30분이 지나면 홈 화면에 <b>아직 입력하지 않은 분</b> 명단이 뜹니다.</p>
+
+  <div class="shots">
+    <div class="shot">
+      <div class="ph">
+        <div class="ph-top"><div class="ph-d">[W37] 2026년 9월 8일 (화)</div><div class="ph-h">홈</div></div>
+        <div class="ph-b">
+          <div class="nbox w">
+            <div class="nt"><span class="nb">16:30</span>미입력 2명</div>
+            <div class="chips"><span class="chip">신정훈</span><span class="chip">정상준</span></div>
+            <div class="cbar">미입력 명단 복사</div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">담당자는 <b>복사</b> 후<br>단톡방에 붙여넣으시면 됩니다</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section>
+  <div class="sh"><div class="sn k">5</div><h2>17:00 — 마감 현황</h2></div>
+  <p class="lead">17시가 지나면 홈 화면이 <b>오늘 배차 결과</b>로 바뀝니다.</p>
+
+  <div class="shots">
+    <div class="shot">
+      <div class="ph">
+        <div class="ph-top"><div class="ph-d">[W37] 2026년 9월 8일 (화)</div><div class="ph-h">홈</div></div>
+        <div class="ph-b">
+          <div class="nbox k">
+            <div class="nt"><span class="nb">17:00</span>오늘 배차 마감</div>
+            <div style="background:#fff;border-radius:9px;padding:2px 9px;margin-top:8px">
+              <div class="nrow"><b>1호차</b><em>17:40</em><span>5명</span></div>
+              <div class="nrow"><b>2호차</b><em>18:30</em><span>4명</span></div>
+              <div class="nrow"><b>3호차</b><em>19:00</em><span>2명</span></div>
+              <div class="nrow"><b>4호차</b><em>20:00</em><span>1명</span></div>
+            </div>
+            <div class="cbar">마감 현황 복사</div>
+          </div>
+        </div>
+      </div>
+      <div class="cap"><b>복사</b>를 누르면 아래 내용이<br>그대로 클립보드에 담깁니다</div>
+    </div>
+  </div>
+
+<pre>[퇴근셔틀] [W37] 2026년 9월 8일 (화) 마감 현황
+
+1호차  17:40  기사 Devender
+· 김두환, 김병균, 민유석, 조규동, 최정갑
+· 메모 오늘 20분 지연
+
+2호차  18:30  기사 Tarun
+· 김수완, 김승용, 박형배, 윤상근
+
+3호차  19:00  기사 Amit
+· 김지구, 성경욱
+
+4호차  20:00  기사 Kailash
+· 김진보
+
+🚫 미이용 : 김휴목(휴가)
+⚠️ 미입력 : 신정훈</pre>
+
+  <div class="note k"><span class="ic">✓</span>
+    <span><b>현황</b> 탭에서도 언제든 복사하실 수 있습니다. 17시 전에도 중간 확인용으로 쓰실 수 있습니다.</span>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="sh"><div class="sn" style="font-size:12px">FAQ</div><h2>자주 묻는 질문</h2></div>
+
+  <details><summary>알림이 오지 않습니다</summary>
+    <p>이 앱은 <b>푸시 알림을 보내지 않습니다.</b> 휴대폰 기종마다 동작이 달라 알림 기능은 없앴습니다. 대신 16시 30분과 17시에 <b>앱 홈 화면</b>에서 명단과 마감 현황을 확인하실 수 있습니다.</p>
+  </details>
+
+  <details><summary>앱을 지웠다 다시 깔면 이름을 또 넣어야 하나요</summary>
+    <p>네. 이름은 휴대폰에 저장되므로 재설치하시면 한 번 더 입력하셔야 합니다. 등록하신 탑승·미이용 내역은 그대로 남아 있습니다.</p>
+  </details>
+
+  <details><summary>휴대폰을 바꿨습니다</summary>
+    <p>새 휴대폰에 앱을 설치하시고 같은 이름으로 다시 등록하시면 됩니다. 이전 휴대폰의 등록 정보는 담당자가 정리해 드립니다.</p>
+  </details>
+
+  <details><summary>앱 설치가 안 됩니다</summary>
+    <p>크롬으로 <code>sajui80.github.io/shuttle-board2/</code> 에 접속하신 뒤, 오른쪽 위 <b>⋮</b> → <b>홈 화면에 추가</b> 를 누르시면 앱과 똑같이 쓰실 수 있습니다.</p>
+  </details>
+
+  <details><summary>화면이 옛날 그대로입니다</summary>
+    <p>앱을 <b>완전히 종료</b>했다가 다시 열어주세요. 최근 앱 목록(□ 버튼)에서 위로 밀어 닫으시면 됩니다.</p>
+  </details>
+
+  <details><summary>토요일에도 운행하나요</summary>
+    <p>네. <b>월요일부터 토요일까지</b> 운행합니다. 일요일과 법인 휴무일에는 운행하지 않습니다.</p>
+  </details>
+</section>
+
+<p class="foot">퇴근 셔틀 앱 V2 · SIEL NOIDA<br>문의는 담당자에게 말씀해 주세요</p>
 
 </div>
-
 </body>
 </html>
