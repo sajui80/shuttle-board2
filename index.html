@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>퇴근셔틀</title>
-<meta name="theme-color" content="#00B14F">
+<meta name="theme-color" content="#2F3944">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="퇴근셔틀">
@@ -151,6 +151,8 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 
 /* ---------- 내 상태 ---------- */
 .mystat{display:flex;gap:12px;align-items:flex-start;border-radius:18px;padding:15px;}
+.mystat.lvwrap{display:block;}
+.mystat-row{display:flex;gap:12px;align-items:flex-start;}
 .mystat.none{background:var(--danger-tint);border:1px solid #F7CDD2;}
 .mystat.ok{background:var(--tint);border:1px solid var(--tint-2);}
 .mystat.leave{background:#EFF2F5;border:1px solid #DDE3E9;}
@@ -161,8 +163,9 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .mystat .t{font-size:16.5px;font-weight:800;letter-spacing:-.01em;}
 .mystat.none .t{color:#B3141F;} .mystat.ok .t{color:var(--brand-dark);} .mystat.leave .t{color:#455160;}
 .mystat .d{font-size:13.5px;color:var(--text-2);margin-top:4px;line-height:1.55;}
-.lvbtns{display:flex;gap:6px;margin-top:11px;}
-.lvbtns .btn{flex:1;background:var(--surface);border-color:#D5DCE3;color:#455160;}
+.lvbtns{display:flex;gap:7px;margin-top:12px;}
+.lvbtns .btn{flex:1;min-width:0;background:var(--surface);border-color:#CFD5DB;color:#37414A;
+  padding:12px 6px;font-size:14.5px;white-space:nowrap;}
 
 /* ---------- 차량 카드 ---------- */
 .carcard{background:var(--surface);border-radius:18px;padding:13px 14px 12px;margin-bottom:10px;box-shadow:0 1px 3px rgba(16,24,20,.07);border:1.5px solid transparent;}
@@ -243,9 +246,12 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .bar i{display:block;height:100%;background:var(--brand);border-radius:99px;transition:width .3s;}
 .strow{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);align-items:baseline;}
 .strow:last-child{border-bottom:none;}
-.strow .sl{width:74px;flex-shrink:0;font-size:14px;font-weight:800;}
+.strow .sl{width:66px;flex-shrink:0;font-size:14px;font-weight:800;}
 .strow .sl em{display:block;font-style:normal;font-family:var(--mono);font-size:12.5px;color:var(--muted);font-weight:500;margin-top:2px;}
-.strow .sn{font-size:13.5px;color:var(--text-2);line-height:1.85;flex:1;}
+.strow .sn{font-size:13.5px;color:var(--text-2);line-height:1.85;flex:1;min-width:0;}
+.sn.crew{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;line-height:1.5;}
+.sn.crew .chip{margin:0;padding:5px 4px;font-size:12.5px;text-align:center;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .chip{display:inline-block;font-size:13px;padding:4px 11px;border-radius:999px;background:var(--bg);color:var(--text-2);margin:0 4px 4px 0;font-weight:600;}
 .chip.miss{background:var(--danger-tint);color:#93211A;font-weight:800;}
 .notice.warn .chip.miss{background:#FFFFFF;color:#93211A;}
@@ -324,7 +330,14 @@ a.merow,a.merow:visited{color:var(--text);text-decoration:none;}
 
 /* ---------- 모달 / 토스트 ---------- */
 .modal{position:fixed;inset:0;background:rgba(16,24,20,.45);z-index:80;display:flex;align-items:flex-end;justify-content:center;}
-.modal-in{background:var(--surface);width:100%;max-width:520px;border-radius:24px 24px 0 0;padding:24px 20px max(24px,env(safe-area-inset-bottom));animation:up .22s ease;}
+.drrow{display:flex;gap:6px;margin-top:6px;}
+.drrow .drPhone{flex:1.7;min-width:0;}
+.drrow .drPlate{flex:1;min-width:0;}
+.modal-in .field{margin-top:15px;}
+.modal-in .field input{padding:11px 13px;font-size:15px;}
+.modal-in{background:var(--surface);width:100%;max-width:520px;border-radius:24px 24px 0 0;
+  padding:24px 20px max(24px,env(safe-area-inset-bottom));animation:up .22s ease;
+  max-height:90vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
 @keyframes up{from{transform:translateY(20px);opacity:.4}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.modal-in{animation:none}}
 .modal-h{font-size:17px;font-weight:900;letter-spacing:-.02em;}
@@ -655,8 +668,7 @@ function isoWeek(d){
 /* 표준 날짜 표기 — [W37] 2026년 9월 8일 (화) */
 function fmtKo(s){
   var d = parseDate(s);
-  return '[W' + pad(isoWeek(d)) + '] ' + d.getFullYear() + '년 '
-       + (d.getMonth()+1) + '월 ' + d.getDate() + '일 ('
+  return d.getFullYear() + '년 ' + (d.getMonth()+1) + '월 ' + d.getDate() + '일 ('
        + '일월화수목금토'[d.getDay()] + ')';
 }
 function fmtShort(s){ return s.slice(5).replace('-','.'); }
@@ -1086,13 +1098,14 @@ function viewHome(){
   var mine = myEntry(), lv = myLeaveToday();
   var st;
   if(lv){
-    st = '<div class="mystat leave"><div class="ic">–</div><div style="flex:1;min-width:0">'
+    st = '<div class="mystat leave lvwrap"><div class="mystat-row"><div class="ic">–</div><div style="flex:1;min-width:0">'
        + '<div class="t">오늘은 이용하지 않습니다</div>'
        + '<div class="d">' + esc(reasonLabel(lv.reason)) + ' · ' + fmtShort(lv.start) + ' ~ ' + fmtShort(lv.end) + '</div>'
+       + '</div></div>'
        + '<div class="lvbtns">'
-       +   '<button class="btn btn-out btn-sm" id="editLeave">기간·사유 변경</button>'
-       +   '<button class="btn btn-out btn-sm" id="cancelLeave">등록 취소</button>'
-       + '</div></div></div>';
+       +   '<button class="btn btn-out" id="editLeave">기간·사유 변경</button>'
+       +   '<button class="btn btn-out" id="cancelLeave">등록 취소</button>'
+       + '</div>';
   } else if(mine){
     var c = carById(mine.car), dr = driverFor(indexOfCar(mine.car));
     var order = ridersOf(mine.car).map(function(r){ return r.uid; }).indexOf(uid) + 1;
@@ -1276,9 +1289,10 @@ function viewStatus(){
     + cars().map(function(c){
         var r = ridersOf(c.id);
         return '<div class="strow"><div class="sl">' + c.id + '호차<em>' + esc(c.time) + '</em></div>'
-             + '<div class="sn">' + (r.length ? r.map(function(x){
-                 return '<span class="chip' + (x.uid===uid?' me':'') + '">' + esc(x.name) + '</span>'; }).join('')
-                 : '<span class="empty">탑승자 없음</span>') + '</div></div>';
+             + (r.length
+                ? '<div class="sn crew">' + r.map(function(x){
+                    return '<span class="chip' + (x.uid===uid?' me':'') + '">' + esc(x.name) + '</span>'; }).join('') + '</div>'
+                : '<div class="sn"><span class="empty">탑승자 없음</span></div>') + '</div>';
       }).join('') + '</div>'
     + '<div class="seclbl">미이용</div><div class="card">'
     +   '<div class="strow"><div class="sl">오늘</div><div class="sn">'
@@ -1425,12 +1439,14 @@ function renderModal(){
          + '<div class="modal-row"><button class="btn btn-out" data-mc="0">닫기</button>'
          + '<button class="btn btn-pri" data-mc="1">복사하기</button></div>';
   } else if(m.type === 'drivers'){
-    body = '<div class="modal-h">기사 정보</div><div class="modal-p">이름과 전화번호를 수정할 수 있습니다.</div>'
+    body = '<div class="modal-h">기사 정보</div><div class="modal-p">이름 · 전화번호 · 차량번호를 수정할 수 있습니다.</div>'
          + drivers().map(function(d,i){
              return '<div class="field"><label>' + (i+1) + '번</label>'
-                  + '<input class="drName" data-i="' + i + '" value="' + esc(d.name) + '" placeholder="이름" style="margin-bottom:6px">'
-                  + '<input class="drPhone" data-i="' + i + '" value="' + esc(d.phone) + '" placeholder="+919999999999" inputmode="tel" style="margin-bottom:6px">'
-                  + '<input class="drPlate" data-i="' + i + '" value="' + esc(plateOf(d)) + '" placeholder="차량번호 뒤 4자리" inputmode="numeric"></div>';
+                  + '<input class="drName" data-i="' + i + '" value="' + esc(d.name) + '" placeholder="이름">'
+                  + '<div class="drrow">'
+                  +   '<input class="drPhone" data-i="' + i + '" value="' + esc(d.phone) + '" placeholder="+919999999999" inputmode="tel">'
+                  +   '<input class="drPlate" data-i="' + i + '" value="' + esc(plateOf(d)) + '" placeholder="차량번호" inputmode="numeric">'
+                  + '</div></div>';
            }).join('')
          + '<div class="modal-row"><button class="btn btn-out" data-mc="0">취소</button>'
          + '<button class="btn btn-pri" data-mc="1">저장</button></div>';
