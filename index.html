@@ -116,7 +116,9 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .gh-sym svg{width:100%;height:auto;display:block;}
 .has-sym .date,.has-sym .hello{padding-right:112px;}
 .has-sym.small-sym .date,.has-sym.small-sym .hello{padding-right:96px;}
-.ghead .hello{font-size:22px;font-weight:800;letter-spacing:-.01em;margin-top:3px;}
+.ghead .hello{font-size:19px;font-weight:700;letter-spacing:-.015em;margin-top:5px;
+  display:flex;align-items:baseline;flex-wrap:wrap;}
+.ghead .hello b{font-size:27px;font-weight:900;letter-spacing:-.03em;margin-right:1px;}
 .ghead.admin{background:var(--text);}
 .countdown{
   display:inline-flex;align-items:center;gap:6px;margin-top:13px;
@@ -172,10 +174,11 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .carcard.picked{border-color:var(--brand);background:var(--tint);}
 .carcard.closed{opacity:.66;}
 .cc-top{display:flex;align-items:center;gap:8px;}
-.cc-badge{width:22px;height:22px;border-radius:8px;background:var(--brand);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.carcard.closed .cc-badge{background:var(--muted);}
-.cc-name{font-size:16.5px;font-weight:800;}
-.picktag{font-size:10px;font-weight:800;background:var(--brand);color:#fff;padding:2px 8px;border-radius:999px;}
+.cc-name b{font-size:21px;font-weight:900;color:var(--brand);margin-right:1px;letter-spacing:-.02em;}
+.carcard.closed .cc-name b{color:var(--muted);}
+.carcard.picked .cc-name b{color:var(--brand-dark);}
+.cc-name{font-size:16.5px;font-weight:800;display:flex;align-items:baseline;}
+.picktag{font-size:12px;font-weight:800;background:var(--brand);color:#fff;padding:4px 11px;border-radius:999px;}
 .cc-time{margin-left:auto;font-family:var(--mono);font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;}
 .cc-art{margin:5px 0 7px;border-radius:12px;padding:5px 8px 0;background:linear-gradient(180deg,#F7F7F6 0%,#ECEDEC 100%);}
 .cc-art.warn{background:linear-gradient(180deg,#FDF4E6 0%,#F8EAD4 100%);}
@@ -194,9 +197,9 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .cc-cnt{font-size:13px;font-weight:800;color:var(--text-2);font-variant-numeric:tabular-nums;white-space:nowrap;}
 .cc-cnt.warn{color:var(--warn);} .cc-cnt.full{color:var(--danger);}
 .cc-foot{display:flex;align-items:center;gap:8px;margin-top:10px;}
-.riders{display:flex;flex-wrap:wrap;gap:4px;flex:1;}
-.riders span{font-size:12.5px;background:var(--bg);color:var(--text-2);padding:4px 10px;border-radius:999px;font-weight:600;}
-.riders span.me{background:var(--brand);color:#fff;font-weight:700;}
+.riders{display:flex;flex-wrap:wrap;gap:5px;flex:1;}
+.riders span{font-size:14.5px;background:var(--bg);color:var(--text-2);padding:6px 13px;border-radius:999px;font-weight:700;}
+.riders span.me{background:var(--brand);color:#fff;font-weight:800;}
 .picked .riders span{background:#fff;}
 .picked .riders span.me{background:var(--brand);color:#fff;}
 
@@ -212,7 +215,7 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .slim-r2 .callbtn{width:25px;height:25px;}
 .slim-r2 .callbtn svg{width:12px;height:12px;}
 .carcard.slim .cc-name{font-size:15.5px;}
-.carcard.slim .cc-badge{width:20px;height:20px;border-radius:7px;font-size:11px;}
+.carcard.slim .cc-name b{font-size:19px;}
 .carcard.slim .cc-driver{white-space:nowrap;font-size:13px;}
 .carcard.slim .cc-cnt{margin-left:auto;font-size:13px;font-weight:800;color:var(--brand-dark);}
 .carcard.slim .cc-cnt.full{color:var(--danger);}
@@ -232,9 +235,9 @@ input,select,textarea{font-family:inherit;font-size:16px;}
 .btn-block{width:100%;}
 
 /* ---------- 탭바 ---------- */
-.tabbar{display:flex;background:var(--surface);border-top:1px solid var(--line);padding:8px 0 max(10px,env(safe-area-inset-bottom));flex-shrink:0;}
-.tab{flex:1;text-align:center;font-size:11.5px;font-weight:800;color:var(--muted);padding:0;}
-.tab svg{width:21px;height:21px;display:block;margin:0 auto 2px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+.tabbar{display:flex;background:var(--surface);border-top:1px solid var(--line);padding:11px 0 max(13px,env(safe-area-inset-bottom));flex-shrink:0;}
+.tab{flex:1;text-align:center;font-size:13.5px;font-weight:800;color:var(--muted);padding:2px 0;letter-spacing:-.02em;}
+.tab svg{width:26px;height:26px;display:block;margin:0 auto 4px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
 .tab.on{color:var(--brand);}
 
 /* ---------- 현황 ---------- */
@@ -389,6 +392,7 @@ a.merow,a.merow:visited{color:var(--text);text-decoration:none;}
 .nnames{font-size:13.5px;color:var(--text-2);line-height:1.6;margin-top:4px;}
 .nnames.none{color:var(--muted);}
 .ncopy{margin-top:13px;}
+.ncopy2{margin-top:8px;background:var(--surface);}
 /* 차량 번호판 */
 .plate{display:inline-flex;align-items:center;gap:5px;flex-shrink:0;
   background:#1B2027;color:#F3F6F8;border-radius:6px;padding:3px 8px 3px 6px;
@@ -1049,12 +1053,19 @@ function header(){
   else if(isOffDay(today))  cd = '<div class="countdown">일요일 · 셔틀 미운행</div>';
   else if(left > 0)         cd = '<div class="countdown">입력 마감까지 <span class="mono">' + pad(Math.floor(left/60)) + ':' + pad(left%60) + '</span></div>';
   else                      cd = '<div class="countdown">등록 마감</div>';
-  var sym = '';
   return '<div class="ghead"><div class="ghead-in">'
-    + sym
     + '<div class="date">' + dateTxt + '</div>'
-    + '<div class="hello">' + esc(me.name) + '님, 안녕하세요</div>'
+    + '<div class="hello"><b>' + esc(me.name) + '</b>님, ' + greeting() + '</div>'
     + cd + '</div></div>';
+}
+
+/* 인사말 — 주말·휴무일 / 탑승 확정 / 오전 / 오후 */
+function isWeekendDay(s){ var d = parseDate(s).getDay(); return d === 0 || d === 6; }
+function greeting(){
+  if(isWeekendDay(today) || isHoliday(today)) return '즐거운 주말 되세요!';
+  if(myEntry())                               return '안전한 퇴근길 되세요!';
+  if(new Date().getHours() < 12)              return 'Good Morning!';
+  return 'Good Afternoon!';
 }
 
 /* 16:30 이후 = 미입력 명단, 17:00 이후 = 마감 현황 */
@@ -1091,6 +1102,9 @@ function noticeCard(){
       }).join('') + '</div>'
     + '<div class="ndesc">총 ' + tot + '명 탑승 · 미이용 ' + todaysLeaves().length + '명 · 미입력 ' + missingUsers().length + '명</div>'
     + '<button class="btn btn-pri btn-block ncopy" id="copySum">마감 현황 복사</button>'
+    + (missingUsers().length
+        ? '<button class="btn btn-out btn-block ncopy2" id="copyMiss">미입력 ' + missingUsers().length + '명 명단 복사</button>'
+        : '')
     + '</div>';
 }
 
@@ -1188,7 +1202,7 @@ function carCard(c, idx, hero, mine){
 
   if(hero){
     return '<div class="carcard' + (picked ? ' picked' : '') + (state==='full' ? ' closed' : '') + '">'
-      + '<div class="cc-top"><div class="cc-badge">' + c.id + '</div><div class="cc-name">' + c.id + '호차</div>'
+      + '<div class="cc-top"><div class="cc-name"><b>' + c.id + '</b>호차</div>'
       +   (picked ? '<span class="picktag">탑승 확정</span>' : '')
       +   '<div class="cc-time">' + esc(c.time) + '</div></div>'
       + '<div class="cc-art ' + state + '"><svg class="car" style="' + skin + '" viewBox="0 0 288 132"><use href="#carnival"/></svg></div>'
@@ -1203,7 +1217,7 @@ function carCard(c, idx, hero, mine){
     + '<div class="slim-top">'
     +   '<div class="slim-left"><div class="slim-art ' + state + '"><svg class="car" style="' + skin + '" viewBox="0 0 288 132"><use href="#carnival"/></svg></div>' + plate + '</div>'
     +   '<div class="slim-main">'
-    +     '<div class="slim-r1"><div class="cc-badge">' + c.id + '</div><div class="cc-name">' + c.id + '호차</div><div class="cc-time">' + esc(c.time) + '</div></div>'
+    +     '<div class="slim-r1"><div class="cc-name"><b>' + c.id + '</b>호차</div><div class="cc-time">' + esc(c.time) + '</div></div>'
     +     '<div class="slim-r2"><div class="cc-driver">기사 <b>' + esc(dr.name) + '</b></div>' + call
     +       '<span class="cc-cnt' + cntCls + '">' + cnt + '</span></div>'
     +   '</div></div>'
@@ -1307,6 +1321,7 @@ function viewStatus(){
     + '<div class="seclbl">미입력 · ' + miss.length + '명</div><div class="card">'
     +   '<div class="sn">' + (miss.length ? miss.map(function(u){
           return '<span class="chip miss">' + esc(u.name) + '</span>'; }).join('') : '<span class="empty">전원 입력 완료</span>') + '</div>'
+    +   (miss.length ? '<button class="btn btn-out btn-block" id="copyMiss" style="margin-top:13px">미입력 명단 복사</button>' : '')
     +   (miss.length ? '<div class="guide" style="margin-top:12px">' + REMIND + '이 지나면 홈 화면에 미입력 명단이 표시됩니다.</div>' : '')
     + '</div>'
     + '</div></div>';
