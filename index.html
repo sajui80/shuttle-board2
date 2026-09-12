@@ -333,6 +333,9 @@ a.merow,a.merow:visited{color:var(--text);text-decoration:none;}
 
 /* ---------- 모달 / 토스트 ---------- */
 .modal{position:fixed;inset:0;background:rgba(16,24,20,.45);z-index:80;display:flex;align-items:flex-end;justify-content:center;}
+.carrow{display:flex;align-items:center;gap:12px;margin-top:12px;}
+.carrow label{flex-shrink:0;width:52px;font-size:14.5px;font-weight:800;color:var(--text);letter-spacing:0;}
+.carrow input{flex:1;margin-top:0;font-family:var(--mono);font-size:18px;font-weight:700;text-align:center;}
 .drrow{display:flex;gap:6px;margin-top:6px;}
 .drrow .drPhone{flex:1.7;min-width:0;}
 .drrow .drPlate{flex:1;min-width:0;}
@@ -1388,6 +1391,7 @@ function viewAdmin(){
     +     '<span class="toggle' + (config.tempHolidayDate === today ? '' : ' off') + '"></span></button>'
     + '</div>'
     + '<div class="seclbl">운영 설정</div><div class="group">'
+    +   '<button class="merow" id="edCars"><span class="mi">🕒</span>차량 출발시간<span class="mv">' + cars().map(function(c){ return c.time; }).join(' · ') + ' ›</span></button>'
     +   '<button class="merow" id="edDrivers"><span class="mi">🚐</span>기사 정보<span class="mv">' + drivers().length + '명 ›</span></button>'
     +   '<button class="merow" id="edUsers"><span class="mi">👥</span>가입자 관리<span class="mv">' + users.length + '명 ›</span></button>'
     +   '<button class="merow" id="edPin"><span class="mi">🔑</span>관리자 PIN 변경<span class="mv">›</span></button>'
@@ -1453,6 +1457,15 @@ function renderModal(){
          + '<textarea class="sharebox" id="shareTxt" readonly>' + esc(m.text) + '</textarea>'
          + '<div class="modal-row"><button class="btn btn-out" data-mc="0">닫기</button>'
          + '<button class="btn btn-pri" data-mc="1">복사하기</button></div>';
+  } else if(m.type === 'cars'){
+    body = '<div class="modal-h">차량 출발시간</div>'
+         + '<div class="modal-p">호차별 출발 시각을 수정할 수 있습니다. 저장하면 전원에게 즉시 반영됩니다.</div>'
+         + cars().map(function(c,i){
+             return '<div class="field carrow"><label>' + c.id + '호차</label>'
+                  + '<input class="carTime" data-i="' + i + '" type="time" value="' + esc(c.time) + '" step="300"></div>';
+           }).join('')
+         + '<div class="modal-row"><button class="btn btn-out" data-mc="0">취소</button>'
+         + '<button class="btn btn-pri" data-mc="1">저장</button></div>';
   } else if(m.type === 'drivers'){
     body = '<div class="modal-h">기사 정보</div><div class="modal-p">이름 · 전화번호 · 차량번호를 수정할 수 있습니다.</div>'
          + drivers().map(function(d,i){
@@ -1638,6 +1651,8 @@ function bind(){
   if(tt) tt.onclick = function(){
     saveConfig({ tempHolidayDate: config.tempHolidayDate === today ? null : today });
   };
+  var ec = document.getElementById('edCars');
+  if(ec) ec.onclick = function(){ openModal({ type:'cars' }); };
   var ed = document.getElementById('edDrivers');
   if(ed) ed.onclick = function(){ openModal({ type:'drivers' }); };
   var eu = document.getElementById('edUsers');
@@ -1689,6 +1704,23 @@ function bindModal(){
       if(m.type === 'text'){
         var t = (document.getElementById('mtext')||{}).value || '';
         closeModal(); if(m.run) m.run(t); return;
+      }
+      if(m.type === 'cars'){
+        var clist = cars().map(function(c){ return { id:c.id, time:c.time }; });
+        var bad = false;
+        each('.carTime', function(inp){
+          var v = (inp.value || '').trim();
+          if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(v)){ bad = true; return; }
+          clist[+inp.dataset.i].time = v;
+        });
+        if(bad){ toast('시간을 올바르게 입력해 주세요'); return; }
+        var srt = clist.slice().sort(function(a,b){ return a.time.localeCompare(b.time); });
+        var same = srt.every(function(c,i){ return c.id === clist[i].id; });
+        closeModal();
+        saveConfig({ cars: clist }).then(function(){
+          toast(same ? '출발시간이 변경되었습니다' : '출발시간이 변경되었습니다 (호차 순서와 시각이 어긋납니다)');
+        }).catch(function(e){ toast('저장 실패: ' + e.message); });
+        return;
       }
       if(m.type === 'drivers'){
         var list = drivers().slice();
